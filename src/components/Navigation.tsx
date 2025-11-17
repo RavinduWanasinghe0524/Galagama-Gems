@@ -45,12 +45,12 @@ export function Navigation({ isLoaded }: NavigationProps) {
 
         {/* Login/Sign Up */}
         <div className="hidden md:flex items-center space-x-4">
-          <button className="text-white hover:text-amber-400 transition-colors">
+          <a href="#login" className="text-white hover:text-amber-400 transition-colors">
             Login
-          </button>
-          <button className="px-4 py-2 border border-white/30 rounded text-white hover:bg-white/10 transition-all">
+          </a>
+          <a href="#signup" className="px-4 py-2 border border-white/30 rounded text-white hover:bg-white/10 transition-all inline-block">
             Sign Up
-          </button>
+          </a>
         </div>
       </div>
     </motion.nav>

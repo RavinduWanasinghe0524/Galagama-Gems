@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { Navigation } from './components/Navigation';
 import { HeroContent } from './components/HeroContent';
+import { Login } from './components/Login';
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState<'home' | 'login'>('home');
   const [isLoaded, setIsLoaded] = useState(false);
   const { scrollY } = useScroll();
   
@@ -13,6 +15,26 @@ export default function App() {
   useEffect(() => {
     setIsLoaded(true);
   }, []);
+
+  // Simple routing via hash
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1);
+      if (hash === 'login') {
+        setCurrentPage('login');
+      } else {
+        setCurrentPage('home');
+      }
+    };
+
+    handleHashChange();
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  if (currentPage === 'login') {
+    return <Login />;
+  }
 
   return (
     <div className="min-h-screen">
