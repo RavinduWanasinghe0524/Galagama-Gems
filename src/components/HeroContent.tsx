@@ -16,7 +16,7 @@ export function HeroContent({ isLoaded }: HeroContentProps) {
           animate={isLoaded ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
         >
-          <ShineText text="GALAGAMA JEWELRY" />
+          <ShineText text="GALAGAMA                                  GEM & JEWELLERY" />
         </motion.div>
 
         {/* Subheading */}
