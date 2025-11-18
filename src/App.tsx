@@ -120,14 +120,14 @@ function AppContent() {
                 repeatType: "reverse"
               }}
               style={{
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1920&q=80')`
+                backgroundImage: `linear-gradient(to bottom, rgba(107, 114, 128, 0.4), rgba(75, 85, 99, 0.5), rgba(55, 65, 81, 0.6)), url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1920&q=80')`
               }}
             />
           </motion.div>
         </motion.div>
 
-        {/* Overlay gradient for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
+        {/* Overlay gradient - creates smooth fade to next section */}
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-500/10 via-gray-600/20 to-gray-700" />
 
         {/* Content */}
         <div className="relative z-10 h-full flex flex-col">
@@ -138,7 +138,7 @@ function AppContent() {
 
       {/* Featured Products Section */}
       <div className="relative py-20 px-8" style={{ 
-        background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)',
+        background: 'linear-gradient(180deg, #000000 0%, #0f172a 15%, #1e293b 50%, #0f172a 85%, #4b5256 100%)',
       }}>
         {/* Decorative overlay */}
         <div className="absolute inset-0 opacity-5" style={{
@@ -201,10 +201,11 @@ function AppContent() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="rounded-lg overflow-hidden"
                 style={{ 
-                  background: 'rgba(30, 41, 59, 0.5)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(251, 191, 36, 0.1)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                  backdropFilter: 'blur(16px)',
+                  WebkitBackdropFilter: 'blur(16px)',
+                  border: '1px solid rgba(251, 191, 36, 0.2)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(251, 191, 36, 0.05)'
                 }}
               >
                 <motion.div 
