@@ -2,16 +2,38 @@ import { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { Navigation } from './Navigation';
 import { Footer } from './Footer';
+import { useCart } from '../context/CartContext';
 import logoImage from '../assets/f9f3557d671d8125a616ddcb69e2a0d761511cdc.png';
 
 export function Packages() {
   const [isLoaded, setIsLoaded] = useState(false);
   const { scrollY } = useScroll();
+  const { addToCart } = useCart();
   const backgroundY = useTransform(scrollY, [0, 500], [0, 150]);
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
+
+  const handleFeatureClick = (featureName: string) => {
+    // Navigate to marketplace and scroll to top
+    window.location.hash = 'marketplace';
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  };
+
+  const handleAddPackageToCart = (pkg: any) => {
+    addToCart({
+      id: `package-${pkg.name}-${Date.now()}`,
+      category: 'Wedding Package',
+      metal: pkg.name.includes('Premium') ? 'Platinum/24K Gold' : pkg.name.includes('Bridal') ? 'Platinum/18K Gold' : '18K Gold',
+      metalPrice: pkg.price,
+      size: 'Standard',
+      estimatedPrice: pkg.price
+    });
+    alert(`${pkg.name} added to cart!`);
+  };
 
   return (
     <div style={{ minHeight: '100vh' }}>
@@ -140,7 +162,7 @@ export function Packages() {
                 Make your special day unforgettable with our carefully curated wedding jewelry collections. Each package is designed to bring elegance and timeless beauty to your celebration.
               </motion.p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20" style={{ alignItems: 'stretch' }}>
           {[
             {
               name: 'Engagement Rings',
@@ -154,8 +176,8 @@ export function Packages() {
                 'Gift box included',
                 'Lifetime warranty',
                 'Free resizing',
-                ' ',
-                ' '
+                'Professional appraisal',
+                'Cleaning service'
               ]
             },
             {
@@ -171,7 +193,7 @@ export function Packages() {
                 '2-year warranty',
                 'Unlimited resizing',
                 'Complimentary cleaning',
-                ' '
+                'Insurance certificate'
               ],
               popular: true
             },
@@ -209,10 +231,12 @@ export function Packages() {
                   : '1px solid rgba(255, 255, 255, 0.3)',
                 borderRadius: '16px',
                 padding: '30px',
+                margin: '0 20px',
                 boxShadow: pkg.popular 
                   ? '0 0 50px rgba(251, 191, 36, 0.4), 0 20px 40px rgba(0, 0, 0, 0.3)' 
                   : '0 10px 30px rgba(0, 0, 0, 0.2)',
-                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
                 transform: pkg.popular ? 'scale(1.02)' : 'scale(1)',
                 transition: 'all 0.3s ease'
               }}
@@ -273,24 +297,37 @@ export function Packages() {
                   ${pkg.price}
                 </p>
                 
-                <ul className="space-y-2.5 mb-6 flex-grow" style={{ 
+                <ul className="space-y-2.5 flex-grow" style={{ 
                   fontSize: '16px',
-                  lineHeight: '1.8'
+                  lineHeight: '1.8',
+                  marginBottom: '24px'
                 }}>
                   {pkg.features.map((feature, i) => (
-                    <li key={i} className="flex items-start" style={{ 
-                      color: feature.trim() === '' ? 'transparent' : 'rgba(255, 255, 255, 0.85)',
-                      visibility: feature.trim() === '' ? 'hidden' : 'visible'
-                    }}>
+                    <motion.li 
+                      key={i} 
+                      className="flex items-start" 
+                      style={{ 
+                        color: feature.trim() === '' ? 'transparent' : 'rgba(255, 255, 255, 0.85)',
+                        visibility: feature.trim() === '' ? 'hidden' : 'visible',
+                        cursor: feature.trim() !== '' ? 'pointer' : 'default',
+                        transition: 'all 0.2s ease'
+                      }}
+                      whileHover={feature.trim() !== '' ? { 
+                        color: 'rgb(251, 191, 36)',
+                        x: 5
+                      } : {}}
+                      onClick={() => feature.trim() !== '' && handleFeatureClick(feature)}
+                    >
                       <span style={{ color: 'rgb(251, 191, 36)', fontSize: '1.1rem', marginRight: '10px' }}>•</span>
-                      {feature}
-                    </li>
+                      <span style={{ textDecoration: feature.trim() !== '' ? 'underline' : 'none', textDecorationColor: 'rgba(251, 191, 36, 0.3)' }}>{feature}</span>
+                    </motion.li>
                   ))}
                 </ul>
               
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={() => handleAddPackageToCart(pkg)}
                   style={{
                     width: '100%',
                     padding: '12px 24px',

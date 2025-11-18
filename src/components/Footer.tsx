@@ -3,12 +3,13 @@ import { motion } from 'motion/react';
 export function Footer() {
   return (
     <footer style={{
-      background: 'linear-gradient(to bottom, rgb(15, 23, 42), rgb(2, 6, 23))',
+      background: 'linear-gradient(135deg, rgba(75, 82, 86, 0.95) 0%, rgba(60, 66, 69, 0.95) 50%, rgba(45, 49, 52, 0.95) 100%)',
       color: 'white',
       padding: '80px 32px 32px',
       width: '100%',
       position: 'relative',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      backdropFilter: 'blur(10px)'
     }}>
       {/* Elegant decorative line */}
       <div style={{
@@ -18,16 +19,16 @@ export function Footer() {
         transform: 'translateX(-50%)',
         width: '200px',
         height: '2px',
-        background: 'linear-gradient(to right, transparent, rgb(251, 191, 36), transparent)',
-        boxShadow: '0 0 20px rgba(251, 191, 36, 0.5)'
+        background: 'linear-gradient(to right, transparent, rgb(212, 175, 55), transparent)',
+        boxShadow: '0 0 20px rgba(212, 175, 55, 0.5)'
       }} />
       
       {/* Subtle pattern overlay */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        opacity: 0.03,
-        backgroundImage: 'radial-gradient(circle at 2px 2px, rgb(251, 191, 36) 1px, transparent 0)',
+        opacity: 0.05,
+        backgroundImage: 'radial-gradient(circle at 2px 2px, rgb(212, 175, 55) 1px, transparent 0)',
         backgroundSize: '40px 40px',
         pointerEvents: 'none'
       }} />
@@ -50,7 +51,7 @@ export function Footer() {
                 fontSize: '24px',
                 fontWeight: '700',
                 marginBottom: '20px',
-                background: 'linear-gradient(to right, rgb(251, 191, 36), rgb(217, 119, 6))',
+                background: 'linear-gradient(to right, rgb(212, 175, 55), rgb(255, 215, 0))',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
@@ -64,7 +65,7 @@ export function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
               style={{
-                color: 'rgba(255, 255, 255, 0.75)',
+                color: 'rgba(255, 255, 255, 0.85)',
                 fontSize: '15px',
                 lineHeight: '1.7',
                 marginBottom: '24px'
@@ -86,25 +87,25 @@ export function Footer() {
                     width: '40px',
                     height: '40px',
                     borderRadius: '50%',
-                    background: 'rgba(251, 191, 36, 0.1)',
-                    border: '1px solid rgba(251, 191, 36, 0.3)',
+                    background: 'rgba(212, 175, 55, 0.15)',
+                    border: '1px solid rgba(212, 175, 55, 0.4)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: 'rgb(251, 191, 36)',
+                    color: 'rgb(212, 175, 55)',
                     textDecoration: 'none',
                     fontSize: '18px',
                     transition: 'all 0.3s ease',
                     cursor: 'pointer'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(251, 191, 36, 0.2)';
-                    e.currentTarget.style.borderColor = 'rgb(251, 191, 36)';
-                    e.currentTarget.style.boxShadow = '0 0 20px rgba(251, 191, 36, 0.4)';
+                    e.currentTarget.style.background = 'rgba(212, 175, 55, 0.25)';
+                    e.currentTarget.style.borderColor = 'rgb(212, 175, 55)';
+                    e.currentTarget.style.boxShadow = '0 0 20px rgba(212, 175, 55, 0.5)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'rgba(251, 191, 36, 0.1)';
-                    e.currentTarget.style.borderColor = 'rgba(251, 191, 36, 0.3)';
+                    e.currentTarget.style.background = 'rgba(212, 175, 55, 0.15)';
+                    e.currentTarget.style.borderColor = 'rgba(212, 175, 55, 0.4)';
                     e.currentTarget.style.boxShadow = 'none';
                   }}
                 >
@@ -144,7 +145,7 @@ export function Footer() {
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
                   <a href={link.href} style={{
-                    color: 'rgba(255, 255, 255, 0.75)',
+                    color: 'rgba(255, 255, 255, 0.85)',
                     fontSize: '15px',
                     textDecoration: 'none',
                     transition: 'all 0.3s ease',
@@ -153,11 +154,11 @@ export function Footer() {
                     gap: '8px'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = 'rgb(251, 191, 36)';
+                    e.currentTarget.style.color = 'rgb(212, 175, 55)';
                     e.currentTarget.style.paddingLeft = '8px';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.75)';
+                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.85)';
                     e.currentTarget.style.paddingLeft = '0';
                   }}>
                     <span style={{ opacity: 0.5 }}>▸</span>
@@ -193,7 +194,7 @@ export function Footer() {
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
                   <a href={link.href} style={{
-                    color: 'rgba(255, 255, 255, 0.75)',
+                    color: 'rgba(255, 255, 255, 0.85)',
                     fontSize: '15px',
                     textDecoration: 'none',
                     transition: 'all 0.3s ease',
@@ -202,11 +203,11 @@ export function Footer() {
                     gap: '8px'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = 'rgb(251, 191, 36)';
+                    e.currentTarget.style.color = 'rgb(212, 175, 55)';
                     e.currentTarget.style.paddingLeft = '8px';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.75)';
+                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.85)';
                     e.currentTarget.style.paddingLeft = '0';
                   }}>
                     <span style={{ opacity: 0.5 }}>▸</span>
@@ -250,15 +251,15 @@ export function Footer() {
                     display: 'flex',
                     alignItems: 'flex-start',
                     gap: '12px',
-                    color: 'rgba(255, 255, 255, 0.75)',
+                    color: 'rgba(255, 255, 255, 0.85)',
                     transition: 'all 0.3s ease'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = 'rgb(251, 191, 36)';
+                    e.currentTarget.style.color = 'rgb(212, 175, 55)';
                     e.currentTarget.style.transform = 'translateX(4px)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.75)';
+                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.85)';
                     e.currentTarget.style.transform = 'translateX(0)';
                   }}
                 >
@@ -297,7 +298,7 @@ export function Footer() {
             textAlign: 'center'
           }}>
           <p style={{
-            color: 'rgba(255, 255, 255, 0.5)',
+            color: 'rgba(255, 255, 255, 0.6)',
             fontSize: '14px',
             letterSpacing: '0.5px'
           }}>
@@ -305,7 +306,7 @@ export function Footer() {
           </p>
           <div style={{
             fontSize: '12px',
-            color: 'rgba(255, 255, 255, 0.4)',
+            color: 'rgba(255, 255, 255, 0.5)',
             display: 'flex',
             gap: '16px',
             flexWrap: 'wrap',
