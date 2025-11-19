@@ -32,61 +32,41 @@ A modern, animated website showcasing gemstone products built with React and Vit
 - Node.js 16.x or higher
 - npm 7.x or higher (or yarn/pnpm)
 
-## 🚀 Getting Started
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
+## Quick start (Windows — PowerShell or Git Bash)
+1. Clone the repo (if you haven't already)
+   ```powershell
    git clone https://github.com/thimira20011/Galagama-Gems.git
    cd Galagama-Gems
    ```
-
-2. **Install dependencies**
-   ```bash
+2. Install dependencies
+   ```powershell
    npm install
    ```
-
-3. **Start the development server**
-   ```bash
+3. Run the dev server
+   ```powershell
    npm run dev
    ```
-   The application will open at `http://localhost:5173`
+   Open the URL shown in the terminal (usually http://localhost:5173)
 
-### Available Scripts
+4. Build for production
+   ```powershell
+   npm run build
+   ```
+5. Preview the production build locally
+   ```powershell
+   npm run preview
+   ```
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server with hot reload |
-| `npm run build` | Build for production (output to `/dist`) |
-| `npm run preview` | Preview production build locally |
-| `npm run deploy` | Deploy to GitHub Pages |
+## Development notes
+- The project uses Vite’s ESM workflow; make edits to .jsx/.tsx and Vite will hot-reload them.
+- If you add large assets, consider Git LFS or optimize files to avoid push failures.
 
-## 📁 Project Structure
-
-```
-Galagama-Gems/
-├── src/              # Source files
-├── dist/             # Production build output
-├── build/            # Build artifacts
-├── index.html        # Entry HTML file
-├── vite.config.ts    # Vite configuration
-└── package.json      # Dependencies and scripts
-```
-
-## 🎨 Development
-
-- **Hot Module Replacement (HMR):** Changes to `.jsx`/`.tsx` files are instantly reflected
-- **Component Library:** Leverages Radix UI for accessible, unstyled components
-- **Animation System:** Uses Motion library for smooth, performant animations
-- **State Management:** React hooks and context for state handling
-
-### Best Practices
-
-- Keep components small and reusable
-- Use semantic HTML for accessibility
-- Optimize images and assets before committing
-- Test animations across different devices and browsers
+## Common commands
+- Install: `npm install`
+- Dev: `npm run dev`
+- Build: `npm run build`
+- Preview: `npm run preview`
+- Run tests (if configured): `npm test` or `npm run test`
 
 ## 🤝 Contributing
 
