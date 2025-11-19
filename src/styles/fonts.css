@@ -1,0 +1,29 @@
+/* ===== Consistent Font Faces Throughout Website ===== */
+
+/* Body defaults to sans-serif */
+body {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+}
+
+/* Topics - Main headings (H1, H2) use Playfair Display */
+h1,
+h2 {
+  font-family: 'Playfair Display', serif !important;
+}
+
+/* Sub-topics - Secondary headings (H3, H4, H5, H6) use Playfair Display */
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Playfair Display', serif !important;
+}
+
+/* Content - Body text elements use sans-serif */
+p,
+div:not([class*="font-"]),
+span:not([class*="font-"]),
+li,
+a:not([class*="font-"]) {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+}
