@@ -1,5 +1,6 @@
 {
-      "name": "Website Animation Build Prompt",
+      "homepage": "https://RavinduWanasinghe0524.github.io/Galagama-Gems",
+      "name": "galagama-gems",
       "version": "0.1.0",
       "private": true,
       "dependencies": {
@@ -54,6 +55,8 @@
       },
       "scripts": {
             "dev": "npx vite",
-            "build": "npx vite build"
+            "build": "npx vite build",
+            "predeploy": "npm run build",
+            "deploy": "gh-pages -d dist"
       }
 }
