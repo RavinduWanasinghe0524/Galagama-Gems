@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
+import { Link } from 'react-router-dom';
 import { Navigation } from './Navigation';
 import { Footer } from './Footer';
 import logoImage from '../assets/f9f3557d671d8125a616ddcb69e2a0d761511cdc.png';
@@ -19,7 +20,7 @@ export function AboutUs() {
       <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
         {/* Background Image with Ken Burns Effect and Parallax */}
         <motion.div
-          style={{ 
+          style={{
             y: backgroundY,
             position: 'absolute',
             inset: 0,
@@ -44,7 +45,7 @@ export function AboutUs() {
             }}
             style={{ width: '100%', height: '100%' }}
           >
-            <motion.div 
+            <motion.div
               style={{
                 width: '100%',
                 height: '100%',
@@ -53,7 +54,7 @@ export function AboutUs() {
                 backgroundPosition: 'center'
               }}
               initial={{ filter: "brightness(0.7) contrast(1)" }}
-              animate={{ 
+              animate={{
                 filter: [
                   "brightness(0.7) contrast(1)",
                   "brightness(0.8) contrast(1.05)",
@@ -76,14 +77,14 @@ export function AboutUs() {
         {/* Content */}
         <div style={{ position: 'relative', zIndex: 10, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
           <Navigation isLoaded={isLoaded} />
-          
+
           {/* About Us Container */}
-          <div style={{ 
-            flex: 1, 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            padding: '48px 32px' 
+          <div style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '48px 32px'
           }}>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -103,9 +104,9 @@ export function AboutUs() {
               }}>
                 {/* Logo */}
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
-                  <img 
-                    src={logoImage} 
-                    alt="Galagama Gem & Jewellery" 
+                  <img
+                    src={logoImage}
+                    alt="Galagama Gem & Jewellery"
                     style={{
                       height: '64px',
                       width: 'auto',
@@ -189,8 +190,8 @@ export function AboutUs() {
                           fontSize: '16px',
                           lineHeight: '1.8'
                         }}>
-                          What began as a small family workshop in the heart of Sri Lanka has evolved into a 
-                          renowned destination where tradition meets modern innovation. Every piece we create 
+                          What began as a small family workshop in the heart of Sri Lanka has evolved into a
+                          renowned destination where tradition meets modern innovation. Every piece we create
                           is a testament to our commitment to excellence and artistry.
                         </p>
                       </motion.div>
@@ -207,7 +208,7 @@ export function AboutUs() {
                           height: '350px'
                         }}
                       >
-                        <img 
+                        <img
                           src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&h=600&fit=crop&q=80"
                           alt="Exquisite Jewelry"
                           style={{
@@ -231,7 +232,7 @@ export function AboutUs() {
                     }}>
                       Our Heritage
                     </h2>
-                    
+
                     {/* Heritage Content Grid */}
                     <div style={{
                       display: 'grid',
@@ -251,8 +252,8 @@ export function AboutUs() {
                           lineHeight: '1.8',
                           marginBottom: '20px'
                         }}>
-                          Nestled in the gem-rich lands of Pabahinna, Galagama Gem & Jewellery carries forward a legacy 
-                          spanning over five decades. Our founders began with a simple vision: to create jewelry 
+                          Nestled in the gem-rich lands of Pabahinna, Galagama Gem & Jewellery carries forward a legacy
+                          spanning over five decades. Our founders began with a simple vision: to create jewelry
                           that captures the essence of Sri Lankan craftsmanship while embracing contemporary design.
                         </p>
                         <p style={{
@@ -260,12 +261,12 @@ export function AboutUs() {
                           fontSize: '16px',
                           lineHeight: '1.8'
                         }}>
-                          Today, we honor our heritage by blending time-honored techniques with cutting-edge 
-                          technology, allowing you to be part of the creative journey through our innovative 
+                          Today, we honor our heritage by blending time-honored techniques with cutting-edge
+                          technology, allowing you to be part of the creative journey through our innovative
                           custom design platform.
                         </p>
                       </div>
-                      
+
                       {/* Right: Heritage Images */}
                       <motion.div
                         initial={{ opacity: 0, x: 30 }}
@@ -282,7 +283,7 @@ export function AboutUs() {
                           overflow: 'hidden',
                           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
                         }}>
-                          <img 
+                          <img
                             src="https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=300&h=300&fit=crop&q=80"
                             alt="Master craftsman at work"
                             style={{
@@ -297,7 +298,7 @@ export function AboutUs() {
                           overflow: 'hidden',
                           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
                         }}>
-                          <img 
+                          <img
                             src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=300&h=300&fit=crop&q=80"
                             alt="Exquisite jewelry piece"
                             style={{
@@ -328,172 +329,172 @@ export function AboutUs() {
                       gap: '24px'
                     }}>
                       {[
-                        { 
+                        {
                           image: 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=400&h=300&fit=crop&q=80',
-                          title: 'Master Craftsmanship', 
-                          desc: 'Every piece is handcrafted by skilled artisans with decades of experience, combining traditional techniques with modern precision to create jewelry that stands the test of time.' 
+                          title: 'Master Craftsmanship',
+                          desc: 'Every piece is handcrafted by skilled artisans with decades of experience, combining traditional techniques with modern precision to create jewelry that stands the test of time.'
                         },
-                        { 
+                        {
                           image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400&h=300&fit=crop&q=80',
-                          title: 'Your Vision, Our Art', 
-                          desc: 'We believe in collaborative creation. Our innovative design platform empowers you to bring your unique ideas to life with complete creative freedom and expert guidance.' 
+                          title: 'Your Vision, Our Art',
+                          desc: 'We believe in collaborative creation. Our innovative design platform empowers you to bring your unique ideas to life with complete creative freedom and expert guidance.'
                         },
-                        { 
+                        {
                           image: 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=400&h=300&fit=crop&q=80',
-                          title: 'Premium Materials', 
-                          desc: 'We source only the finest metals and authentic gemstones from trusted suppliers, ensuring that every creation meets the highest standards of quality and ethical sourcing.' 
+                          title: 'Premium Materials',
+                          desc: 'We source only the finest metals and authentic gemstones from trusted suppliers, ensuring that every creation meets the highest standards of quality and ethical sourcing.'
                         },
-                        { 
+                        {
                           image: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=400&h=300&fit=crop&q=80',
-                          title: 'Lifetime Partnership', 
-                          desc: 'Your satisfaction is our priority. We stand behind our work with comprehensive lifetime warranty, complimentary maintenance, and dedicated customer support.' 
+                          title: 'Lifetime Partnership',
+                          desc: 'Your satisfaction is our priority. We stand behind our work with comprehensive lifetime warranty, complimentary maintenance, and dedicated customer support.'
                         }
                       ].map((value, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                          transition={{ delay: 0.7 + index * 0.08, duration: 0.4 }}
+                          whileHover={{ y: -8, scale: 1.02 }}
+                          style={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                            borderRadius: '12px',
+                            overflow: 'hidden',
+                            transition: 'all 0.3s'
+                          }}
+                        >
+                          {/* Image */}
+                          <div style={{
+                            width: '100%',
+                            height: '180px',
+                            overflow: 'hidden'
+                          }}>
+                            <img
+                              src={value.image}
+                              alt={value.title}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                transition: 'transform 0.3s'
+                              }}
+                              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                            />
+                          </div>
+
+                          {/* Content */}
+                          <div style={{ padding: '24px' }}>
+                            <h3 style={{
+                              fontFamily: "'Playfair Display', serif",
+                              fontSize: '20px',
+                              color: 'white',
+                              marginBottom: '12px',
+                              fontWeight: '600'
+                            }}>
+                              {value.title}
+                            </h3>
+                            <p style={{
+                              color: 'rgba(255, 255, 255, 0.75)',
+                              fontSize: '14px',
+                              lineHeight: '1.7'
+                            }}>
+                              {value.desc}
+                            </p>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Craftsmanship Excellence with Artisan Image */}
+                  <div style={{ marginBottom: '40px' }}>
+                    <h2 style={{
+                      fontFamily: "'Playfair Display', serif",
+                      fontSize: '32px',
+                      color: 'rgb(251, 191, 36)',
+                      marginBottom: '24px',
+                      textAlign: 'center'
+                    }}>
+                      Craftsmanship Excellence
+                    </h2>
+
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                      gap: '32px',
+                      alignItems: 'center'
+                    }}>
+                      {/* Artisan Image */}
                       <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                        transition={{ delay: 0.7 + index * 0.08, duration: 0.4 }}
-                        whileHover={{ y: -8, scale: 1.02 }}
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={isLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+                        transition={{ duration: 0.6, delay: 0.8 }}
                         style={{
-                          backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                          border: '1px solid rgba(255, 255, 255, 0.2)',
                           borderRadius: '12px',
                           overflow: 'hidden',
-                          transition: 'all 0.3s'
+                          boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)',
+                          height: '350px'
                         }}
                       >
-                        {/* Image */}
-                        <div style={{
-                          width: '100%',
-                          height: '180px',
-                          overflow: 'hidden'
-                        }}>
-                          <img 
-                            src={value.image}
-                            alt={value.title}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'cover',
-                              transition: 'transform 0.3s'
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
-                            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                          />
-                        </div>
-                        
-                        {/* Content */}
-                        <div style={{ padding: '24px' }}>
-                          <h3 style={{
-                            fontFamily: "'Playfair Display', serif",
-                            fontSize: '20px',
-                            color: 'white',
-                            marginBottom: '12px',
-                            fontWeight: '600'
-                          }}>
-                            {value.title}
-                          </h3>
-                          <p style={{
-                            color: 'rgba(255, 255, 255, 0.75)',
-                            fontSize: '14px',
-                            lineHeight: '1.7'
-                          }}>
-                            {value.desc}
-                          </p>
-                        </div>
+                        <img
+                          src="https://images.unsplash.com/photo-1610375461246-83df859d849d?w=600&h=400&fit=crop&q=80"
+                          alt="Skilled artisan crafting jewelry"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover'
+                          }}
+                        />
                       </motion.div>
-                    ))}
-                  </div>
-                </div>
 
-                {/* Craftsmanship Excellence with Artisan Image */}
-                <div style={{ marginBottom: '40px' }}>
-                  <h2 style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontSize: '32px',
-                    color: 'rgb(251, 191, 36)',
-                    marginBottom: '24px',
-                    textAlign: 'center'
-                  }}>
-                    Craftsmanship Excellence
-                  </h2>
-                  
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                    gap: '32px',
-                    alignItems: 'center'
-                  }}>
-                    {/* Artisan Image */}
-                    <motion.div
-                      initial={{ opacity: 0, x: -30 }}
-                      animate={isLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
-                      transition={{ duration: 0.6, delay: 0.8 }}
-                      style={{
-                        borderRadius: '12px',
-                        overflow: 'hidden',
-                        boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)',
-                        height: '350px'
-                      }}
-                    >
-                      <img 
-                        src="https://images.unsplash.com/photo-1610375461246-83df859d849d?w=600&h=400&fit=crop&q=80"
-                        alt="Skilled artisan crafting jewelry"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover'
-                        }}
-                      />
-                    </motion.div>
-                    
-                    {/* Content */}
-                    <div>
-                      <p style={{
-                        color: 'rgba(255, 255, 255, 0.8)',
-                        fontSize: '16px',
-                        lineHeight: '1.8',
-                        marginBottom: '20px'
-                      }}>
-                        Our master artisans bring decades of experience to every piece. Each creation undergoes 
-                        rigorous quality checks and is crafted with meticulous attention to detail, ensuring that 
-                        your jewelry meets the highest standards of excellence.
-                      </p>
-                      <p style={{
-                        color: 'rgba(255, 255, 255, 0.8)',
-                        fontSize: '16px',
-                        lineHeight: '1.8'
-                      }}>
-                        From intricate hand-engraving to precision stone setting, every technique we employ 
-                        is a testament to our commitment to preserving the art of fine jewelry making.
-                      </p>
-                      
-                      {/* Small feature highlights */}
-                      <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(2, 1fr)',
-                        gap: '16px',
-                        marginTop: '24px'
-                      }}>
-                        {['Hand Engraving', 'Stone Setting', 'Metal Polishing', 'Quality Control'].map((skill, idx) => (
-                          <div key={idx} style={{
-                            padding: '12px',
-                            backgroundColor: 'rgba(251, 191, 36, 0.1)',
-                            border: '1px solid rgba(251, 191, 36, 0.3)',
-                            borderRadius: '6px',
-                            textAlign: 'center',
-                            color: 'rgba(255, 255, 255, 0.9)',
-                            fontSize: '14px',
-                            fontWeight: '500'
-                          }}>
-                            ✓ {skill}
-                          </div>
-                        ))}
+                      {/* Content */}
+                      <div>
+                        <p style={{
+                          color: 'rgba(255, 255, 255, 0.8)',
+                          fontSize: '16px',
+                          lineHeight: '1.8',
+                          marginBottom: '20px'
+                        }}>
+                          Our master artisans bring decades of experience to every piece. Each creation undergoes
+                          rigorous quality checks and is crafted with meticulous attention to detail, ensuring that
+                          your jewelry meets the highest standards of excellence.
+                        </p>
+                        <p style={{
+                          color: 'rgba(255, 255, 255, 0.8)',
+                          fontSize: '16px',
+                          lineHeight: '1.8'
+                        }}>
+                          From intricate hand-engraving to precision stone setting, every technique we employ
+                          is a testament to our commitment to preserving the art of fine jewelry making.
+                        </p>
+
+                        {/* Small feature highlights */}
+                        <div style={{
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(2, 1fr)',
+                          gap: '16px',
+                          marginTop: '24px'
+                        }}>
+                          {['Hand Engraving', 'Stone Setting', 'Metal Polishing', 'Quality Control'].map((skill, idx) => (
+                            <div key={idx} style={{
+                              padding: '12px',
+                              backgroundColor: 'rgba(251, 191, 36, 0.1)',
+                              border: '1px solid rgba(251, 191, 36, 0.3)',
+                              borderRadius: '6px',
+                              textAlign: 'center',
+                              color: 'rgba(255, 255, 255, 0.9)',
+                              fontSize: '14px',
+                              fontWeight: '500'
+                            }}>
+                              ✓ {skill}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
                   {/* Stats Section */}
                   <div style={{ marginBottom: '40px' }}>
@@ -515,40 +516,40 @@ export function AboutUs() {
                       borderRadius: '12px',
                       border: '1px solid rgba(255, 255, 255, 0.1)'
                     }}>
-                    {[
-                      { number: '50+', label: 'Years of Legacy' },
-                      { number: '10,000+', label: 'Happy Customers' },
-                      { number: '15+', label: 'Master Artisans' },
-                      { number: '100%', label: 'Customer Satisfaction' }
-                    ].map((stat, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={isLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                        transition={{ delay: 0.8 + index * 0.1 }}
-                        style={{ textAlign: 'center' }}
-                      >
-                        <div style={{
-                          fontFamily: "'Playfair Display', serif",
-                          fontSize: '42px',
-                          fontWeight: 'bold',
-                          color: 'rgb(251, 191, 36)',
-                          marginBottom: '8px'
-                        }}>
-                          {stat.number}
-                        </div>
-                        <div style={{
-                          color: 'rgba(255, 255, 255, 0.7)',
-                          fontSize: '14px',
-                          textTransform: 'uppercase',
-                          letterSpacing: '1px'
-                        }}>
-                          {stat.label}
-                        </div>
-                      </motion.div>
-                    ))}
+                      {[
+                        { number: '50+', label: 'Years of Legacy' },
+                        { number: '10,000+', label: 'Happy Customers' },
+                        { number: '15+', label: 'Master Artisans' },
+                        { number: '100%', label: 'Customer Satisfaction' }
+                      ].map((stat, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={isLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                          transition={{ delay: 0.8 + index * 0.1 }}
+                          style={{ textAlign: 'center' }}
+                        >
+                          <div style={{
+                            fontFamily: "'Playfair Display', serif",
+                            fontSize: '42px',
+                            fontWeight: 'bold',
+                            color: 'rgb(251, 191, 36)',
+                            marginBottom: '8px'
+                          }}>
+                            {stat.number}
+                          </div>
+                          <div style={{
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            fontSize: '14px',
+                            textTransform: 'uppercase',
+                            letterSpacing: '1px'
+                          }}>
+                            {stat.label}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
                   {/* Quality & Sustainability with Images */}
                   <div style={{ marginBottom: '40px' }}>
@@ -561,7 +562,7 @@ export function AboutUs() {
                     }}>
                       Quality & Sustainability
                     </h2>
-                    
+
                     <div style={{
                       display: 'grid',
                       gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -576,8 +577,8 @@ export function AboutUs() {
                           lineHeight: '1.8',
                           marginBottom: '20px'
                         }}>
-                          We are committed to ethical sourcing and sustainable practices. Every gemstone and metal 
-                          we use is carefully selected from certified suppliers who share our values of 
+                          We are committed to ethical sourcing and sustainable practices. Every gemstone and metal
+                          we use is carefully selected from certified suppliers who share our values of
                           environmental responsibility and fair trade.
                         </p>
                         <p style={{
@@ -585,11 +586,11 @@ export function AboutUs() {
                           fontSize: '16px',
                           lineHeight: '1.8'
                         }}>
-                          Our quality assurance process ensures that each piece not only meets but exceeds 
+                          Our quality assurance process ensures that each piece not only meets but exceeds
                           international jewelry standards, giving you confidence in your investment.
                         </p>
                       </div>
-                      
+
                       {/* Gemstone Images */}
                       <motion.div
                         initial={{ opacity: 0, x: 30 }}
@@ -606,7 +607,7 @@ export function AboutUs() {
                           overflow: 'hidden',
                           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
                         }}>
-                          <img 
+                          <img
                             src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=300&h=300&fit=crop&q=80"
                             alt="Premium gemstones"
                             style={{
@@ -621,7 +622,7 @@ export function AboutUs() {
                           overflow: 'hidden',
                           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
                         }}>
-                          <img 
+                          <img
                             src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&h=300&fit=crop&q=80"
                             alt="Quality certification"
                             style={{
@@ -660,9 +661,9 @@ export function AboutUs() {
                       maxWidth: '700px',
                       margin: '0 auto'
                     }}>
-                      Our mission is to bridge the gap between your dreams and reality. We empower you to 
-                      create jewelry that tells your unique story—whether it's a symbol of love, achievement, 
-                      or heritage. Through our innovative platform and expert craftsmanship, we transform your 
+                      Our mission is to bridge the gap between your dreams and reality. We empower you to
+                      create jewelry that tells your unique story—whether it's a symbol of love, achievement,
+                      or heritage. Through our innovative platform and expert craftsmanship, we transform your
                       vision into timeless masterpieces that will be cherished for generations.
                     </p>
                   </div>
@@ -683,7 +684,7 @@ export function AboutUs() {
                     >
                       Why Choose Galagama Gem & Jewellery
                     </motion.h2>
-                    
+
                     {/* Feature Image Showcase */}
                     <div style={{
                       display: 'grid',
@@ -717,22 +718,22 @@ export function AboutUs() {
                         <motion.div
                           key={index}
                           initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                          animate={isLoaded ? { 
-                            opacity: 1, 
-                            y: 0, 
-                            scale: 1 
-                          } : { 
-                            opacity: 0, 
-                            y: 50, 
-                            scale: 0.9 
+                          animate={isLoaded ? {
+                            opacity: 1,
+                            y: 0,
+                            scale: 1
+                          } : {
+                            opacity: 0,
+                            y: 50,
+                            scale: 0.9
                           }}
-                          transition={{ 
-                            duration: 0.6, 
+                          transition={{
+                            duration: 0.6,
                             delay: 1 + index * 0.15,
                             ease: "easeOut"
                           }}
-                          whileHover={{ 
-                            y: -12, 
+                          whileHover={{
+                            y: -12,
                             scale: 1.05,
                             transition: { duration: 0.3 }
                           }}
@@ -745,7 +746,7 @@ export function AboutUs() {
                             cursor: 'pointer'
                           }}
                         >
-                          <motion.img 
+                          <motion.img
                             src={item.image}
                             alt={item.title}
                             style={{
@@ -756,7 +757,7 @@ export function AboutUs() {
                             whileHover={{ scale: 1.1 }}
                             transition={{ duration: 0.4 }}
                           />
-                          <motion.div 
+                          <motion.div
                             style={{
                               position: 'absolute',
                               bottom: 0,
@@ -798,10 +799,8 @@ export function AboutUs() {
                     transition={{ duration: 0.5, delay: 1 }}
                     style={{ textAlign: 'center', marginTop: '40px' }}
                   >
-                    <motion.a
-                      href="#custom-design"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.98 }}
+                    <Link
+                      to="/custom-design"
                       style={{
                         display: 'inline-block',
                         padding: '16px 48px',
@@ -816,13 +815,15 @@ export function AboutUs() {
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.boxShadow = '0 10px 30px -5px rgba(251, 191, 36, 0.5)';
+                        e.currentTarget.style.transform = 'scale(1.05)';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+                        e.currentTarget.style.transform = 'scale(1)';
                       }}
                     >
                       Start Your Design Journey
-                    </motion.a>
+                    </Link>
                   </motion.div>
                 </motion.div>
               </div>

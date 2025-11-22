@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
+import { Link } from 'react-router-dom';
 import { Navigation } from './Navigation';
 import { Footer } from './Footer';
 import { Toast } from './Toast';
@@ -30,75 +31,75 @@ export function CustomDesign() {
   const [selectedShapeIndex, setSelectedShapeIndex] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
-  const [lineStart, setLineStart] = useState<{x: number, y: number} | null>(null);
-  const [dragOffset, setDragOffset] = useState<{x: number, y: number}>({ x: 0, y: 0 });
-  
+  const [lineStart, setLineStart] = useState<{ x: number, y: number } | null>(null);
+  const [dragOffset, setDragOffset] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
+
   const { scrollY } = useScroll();
   const backgroundY = useTransform(scrollY, [0, 500], [0, 150]);
 
   const categories = [
-    { 
-      value: 'ring', 
+    {
+      value: 'ring',
       label: 'Ring',
       image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&h=300&fit=crop&q=80'
     },
-    { 
-      value: 'necklace', 
+    {
+      value: 'necklace',
       label: 'Necklace',
       image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&h=300&fit=crop&q=80'
     },
-    { 
-      value: 'earring', 
+    {
+      value: 'earring',
       label: 'Earrings',
       image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=300&fit=crop&q=80'
     },
-    { 
-      value: 'bracelet', 
+    {
+      value: 'bracelet',
       label: 'Bracelet',
       image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=300&fit=crop&q=80'
     },
   ];
 
   const metals = [
-    { 
-      value: 'gold-24k', 
-      label: '24K Gold', 
-      price: 500, 
+    {
+      value: 'gold-24k',
+      label: '24K Gold',
+      price: 500,
       color: '#FFD700',
       image: 'https://images.unsplash.com/photo-1610375461246-83df859d849d?w=300&h=300&fit=crop&q=80&auto=format'
     },
-    { 
-      value: 'gold-18k', 
-      label: '18K Gold', 
-      price: 350, 
+    {
+      value: 'gold-18k',
+      label: '18K Gold',
+      price: 350,
       color: '#F4C430',
       image: 'https://images.unsplash.com/photo-1618042164219-62c820f10723?w=300&h=300&fit=crop&q=80&auto=format'
     },
-    { 
-      value: 'white-gold', 
-      label: 'White Gold', 
-      price: 400, 
+    {
+      value: 'white-gold',
+      label: 'White Gold',
+      price: 400,
       color: '#E8E8E8',
       image: 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=300&h=300&fit=crop&q=80&auto=format'
     },
-    { 
-      value: 'rose-gold', 
-      label: 'Rose Gold', 
-      price: 420, 
+    {
+      value: 'rose-gold',
+      label: 'Rose Gold',
+      price: 420,
       color: '#B76E79',
       image: 'https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=300&h=300&fit=crop&q=80&auto=format'
     },
-    { 
-      value: 'platinum', 
-      label: 'Platinum', 
-      price: 600, 
+    {
+      value: 'platinum',
+      label: 'Platinum',
+      price: 600,
       color: '#E5E4E2',
       image: 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=300&h=300&fit=crop&q=80&auto=format'
     },
-    { 
-      value: 'silver', 
-      label: 'Sterling Silver', 
-      price: 150, 
+    {
+      value: 'silver',
+      label: 'Sterling Silver',
+      price: 150,
       color: '#C0C0C0',
       image: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=300&h=300&fit=crop&q=80&auto=format'
     },
@@ -113,91 +114,91 @@ export function CustomDesign() {
 
   const gemstones = {
     precious: [
-      { 
-        value: 'diamond', 
-        label: 'Diamond', 
-        price: 800, 
+      {
+        value: 'diamond',
+        label: 'Diamond',
+        price: 800,
         color: '#B9F2FF',
         image: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=300&h=300&fit=crop&q=80&auto=format'
       },
-      { 
-        value: 'ruby', 
-        label: 'Ruby', 
-        price: 600, 
+      {
+        value: 'ruby',
+        label: 'Ruby',
+        price: 600,
         color: '#E0115F',
         image: 'https://images.unsplash.com/photo-1605100804999-1fdd6f4e4f3d?w=300&h=300&fit=crop&q=80&auto=format'
       },
-      { 
-        value: 'sapphire', 
-        label: 'Sapphire', 
-        price: 550, 
+      {
+        value: 'sapphire',
+        label: 'Sapphire',
+        price: 550,
         color: '#0F52BA',
         image: 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=300&h=300&fit=crop&q=80&auto=format'
       },
-      { 
-        value: 'emerald', 
-        label: 'Emerald', 
-        price: 650, 
+      {
+        value: 'emerald',
+        label: 'Emerald',
+        price: 650,
         color: '#50C878',
         image: 'https://images.unsplash.com/photo-1610216705422-caa3fcb6d158?w=300&h=300&fit=crop&q=80&auto=format'
       },
     ],
     'semi-precious': [
-      { 
-        value: 'amethyst', 
-        label: 'Amethyst', 
-        price: 150, 
+      {
+        value: 'amethyst',
+        label: 'Amethyst',
+        price: 150,
         color: '#9966CC',
         image: 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=300&h=300&fit=crop&q=80&auto=format'
       },
-      { 
-        value: 'topaz', 
-        label: 'Topaz', 
-        price: 180, 
+      {
+        value: 'topaz',
+        label: 'Topaz',
+        price: 180,
         color: '#FFC87C',
         image: 'https://images.unsplash.com/photo-1634755974992-c3e8046b0d4b?w=300&h=300&fit=crop&q=80&auto=format'
       },
-      { 
-        value: 'aquamarine', 
-        label: 'Aquamarine', 
-        price: 200, 
+      {
+        value: 'aquamarine',
+        label: 'Aquamarine',
+        price: 200,
         color: '#7FFFD4',
         image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=300&h=300&fit=crop&q=80&auto=format'
       },
-      { 
-        value: 'garnet', 
-        label: 'Garnet', 
-        price: 120, 
+      {
+        value: 'garnet',
+        label: 'Garnet',
+        price: 120,
         color: '#733635',
         image: 'https://images.unsplash.com/photo-1635767798597-99c5f0d4b12d?w=300&h=300&fit=crop&q=80&auto=format'
       },
-      { 
-        value: 'opal', 
-        label: 'Opal', 
-        price: 220, 
+      {
+        value: 'opal',
+        label: 'Opal',
+        price: 220,
         color: '#A8C3BC',
         image: 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=300&h=300&fit=crop&q=80&auto=format'
       },
-      { 
-        value: 'turquoise', 
-        label: 'Turquoise', 
-        price: 100, 
+      {
+        value: 'turquoise',
+        label: 'Turquoise',
+        price: 100,
         color: '#40E0D0',
         image: 'https://images.unsplash.com/photo-1634226005148-f85c5d6c5dcb?w=300&h=300&fit=crop&q=80&auto=format'
       },
     ],
     synthetic: [
-      { 
-        value: 'cubic-zirconia', 
-        label: 'Cubic Zirconia', 
-        price: 50, 
+      {
+        value: 'cubic-zirconia',
+        label: 'Cubic Zirconia',
+        price: 50,
         color: '#FFFFFF',
         image: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=300&h=300&fit=crop&q=80&auto=format'
       },
-      { 
-        value: 'moissanite', 
-        label: 'Moissanite', 
-        price: 250, 
+      {
+        value: 'moissanite',
+        label: 'Moissanite',
+        price: 250,
         color: '#F0EAD6',
         image: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=300&h=300&fit=crop&q=80&auto=format'
       },
@@ -258,7 +259,7 @@ export function CustomDesign() {
     const draw = (e: MouseEvent | TouchEvent) => {
       if (!drawing || drawMode === 'line') return;
       e.preventDefault();
-      
+
       const rect = canvas.getBoundingClientRect();
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
@@ -284,7 +285,7 @@ export function CustomDesign() {
       ctx.moveTo(lastX, lastY);
       ctx.lineTo(currentX, currentY);
       ctx.stroke();
-      
+
       lastX = currentX;
       lastY = currentY;
     };
@@ -344,7 +345,7 @@ export function CustomDesign() {
       for (let i = drawnShapes.length - 1; i >= 0; i--) {
         const { x, y, size = 80 } = drawnShapes[i];
         const distance = getDistance(clickX, clickY, x, y);
-        
+
         // Check if near edge (for resizing) - more lenient threshold
         if (isNearEdge(clickX, clickY, x, y, size)) {
           setSelectedShapeIndex(i);
@@ -356,7 +357,7 @@ export function CustomDesign() {
           e.preventDefault();
           return;
         }
-        
+
         // Check if inside shape (for moving)
         if (distance < size / 2) {
           setSelectedShapeIndex(i);
@@ -370,7 +371,7 @@ export function CustomDesign() {
           return;
         }
       }
-      
+
       setSelectedShapeIndex(null);
     };
 
@@ -453,21 +454,21 @@ export function CustomDesign() {
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     const bgCanvas = backgroundCanvasRef.current;
-    
+
     if (canvas) {
       const ctx = canvas.getContext('2d');
       if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
     }
-    
+
     if (bgCanvas) {
       const bgCtx = bgCanvas.getContext('2d');
       if (bgCtx) {
         bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
       }
     }
-    
+
     setDrawnShapes([]);
     setSelectedShapeIndex(null);
     setLineStart(null);
@@ -476,22 +477,22 @@ export function CustomDesign() {
   const saveDesign = () => {
     const canvas = canvasRef.current;
     const bgCanvas = backgroundCanvasRef.current;
-    
+
     if (!canvas || !bgCanvas) return;
-    
+
     // Create a temporary canvas to merge both layers
     const tempCanvas = document.createElement('canvas');
     tempCanvas.width = canvas.width;
     tempCanvas.height = canvas.height;
     const tempCtx = tempCanvas.getContext('2d');
-    
+
     if (!tempCtx) return;
-    
+
     // Draw background (drawings) first
     tempCtx.drawImage(bgCanvas, 0, 0);
     // Then draw shapes on top
     tempCtx.drawImage(canvas, 0, 0);
-    
+
     // Convert to image and download
     tempCanvas.toBlob((blob) => {
       if (!blob) return;
@@ -514,16 +515,16 @@ export function CustomDesign() {
 
     drawnShapes.forEach((shapeData, index) => {
       const { shape, x, y, size = 80 } = shapeData;
-      
-      ctx.fillStyle = selectedShapeIndex === index 
-        ? 'rgba(251, 191, 36, 0.5)' 
+
+      ctx.fillStyle = selectedShapeIndex === index
+        ? 'rgba(251, 191, 36, 0.5)'
         : 'rgba(251, 191, 36, 0.3)';
       ctx.strokeStyle = selectedShapeIndex === index ? '#FFD700' : '#FBB040';
       ctx.lineWidth = selectedShapeIndex === index ? 4 : 3;
       ctx.shadowBlur = 10;
       ctx.shadowColor = '#FBB040';
 
-      switch(shape) {
+      switch (shape) {
         case 'circle':
           ctx.beginPath();
           ctx.arc(x, y, size / 2, 0, Math.PI * 2);
@@ -561,7 +562,7 @@ export function CustomDesign() {
             const sy = y + Math.sin(angle) * size / 2;
             if (i === 0) ctx.moveTo(sx, sy);
             else ctx.lineTo(sx, sy);
-            
+
             const innerAngle = angle + Math.PI / 5;
             const innerX = x + Math.cos(innerAngle) * size / 4;
             const innerY = y + Math.sin(innerAngle) * size / 4;
@@ -647,7 +648,7 @@ export function CustomDesign() {
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const size = 80;
-    
+
     setDrawnShapes([...drawnShapes, { shape, x: centerX, y: centerY, size }]);
   };
 
@@ -674,20 +675,20 @@ export function CustomDesign() {
     let price = 0;
     const metal = metals.find(m => m.value === selectedMetal);
     if (metal) price += metal.price;
-    
+
     if (selectedGemType && selectedGemType !== 'none') {
       const gem = gemstones[selectedGemType as keyof typeof gemstones]?.find(g => g.value === selectedGemstone);
       if (gem) price += gem.price;
     }
-    
+
     if (selectedSize) {
       const size = sizes.find(s => s.value === selectedSize);
       if (size) price += size.price;
     }
-    
+
     if (engravingText) price += 80;
     if (uploadedDesign || designMode) price += 150; // Custom design fee
-    
+
     setEstimatedPrice(price);
   }, [selectedMetal, selectedGemType, selectedGemstone, selectedSize, engravingText, uploadedDesign, designMode]);
 
@@ -701,7 +702,7 @@ export function CustomDesign() {
       <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
         {/* Background Image with Ken Burns Effect and Parallax */}
         <motion.div
-          style={{ 
+          style={{
             y: backgroundY,
             position: 'absolute',
             inset: 0,
@@ -726,7 +727,7 @@ export function CustomDesign() {
             }}
             style={{ width: '100%', height: '100%' }}
           >
-            <motion.div 
+            <motion.div
               style={{
                 width: '100%',
                 height: '100%',
@@ -735,7 +736,7 @@ export function CustomDesign() {
                 backgroundPosition: 'center'
               }}
               initial={{ filter: "brightness(0.7) contrast(1)" }}
-              animate={{ 
+              animate={{
                 filter: [
                   "brightness(0.7) contrast(1)",
                   "brightness(0.8) contrast(1.05)",
@@ -758,14 +759,14 @@ export function CustomDesign() {
         {/* Content */}
         <div style={{ position: 'relative', zIndex: 10, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
           <Navigation isLoaded={isLoaded} />
-          
+
           {/* Custom Design Container */}
-          <div style={{ 
-            flex: 1, 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            padding: '48px 32px' 
+          <div style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '48px 32px'
           }}>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -785,9 +786,9 @@ export function CustomDesign() {
               }}>
                 {/* Logo in card */}
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
-                  <img 
-                    src={logoImage} 
-                    alt="Galagama Gems" 
+                  <img
+                    src={logoImage}
+                    alt="Galagama Gems"
                     style={{
                       height: '64px',
                       width: 'auto',
@@ -861,8 +862,8 @@ export function CustomDesign() {
                           style={{
                             padding: '0',
                             backgroundColor: 'transparent',
-                            border: selectedCategory === cat.value 
-                              ? '3px solid rgb(251, 191, 36)' 
+                            border: selectedCategory === cat.value
+                              ? '3px solid rgb(251, 191, 36)'
                               : '2px solid rgba(255, 255, 255, 0.2)',
                             borderRadius: '12px',
                             cursor: 'pointer',
@@ -889,8 +890,8 @@ export function CustomDesign() {
                                 width: '100%',
                                 height: '100%',
                                 objectFit: 'cover',
-                                filter: selectedCategory === cat.value 
-                                  ? 'brightness(1.1) saturate(1.2)' 
+                                filter: selectedCategory === cat.value
+                                  ? 'brightness(1.1) saturate(1.2)'
                                   : 'brightness(0.8) saturate(0.9)',
                                 transition: 'all 0.3s'
                               }}
@@ -971,8 +972,8 @@ export function CustomDesign() {
                               style={{
                                 padding: '0',
                                 backgroundColor: 'transparent',
-                                border: selectedMetal === metal.value 
-                                  ? '3px solid rgb(251, 191, 36)' 
+                                border: selectedMetal === metal.value
+                                  ? '3px solid rgb(251, 191, 36)'
                                   : '2px solid rgba(255, 255, 255, 0.2)',
                                 borderRadius: '12px',
                                 cursor: 'pointer',
@@ -999,8 +1000,8 @@ export function CustomDesign() {
                                     width: '100%',
                                     height: '100%',
                                     objectFit: 'cover',
-                                    filter: selectedMetal === metal.value 
-                                      ? 'brightness(1.1) saturate(1.3)' 
+                                    filter: selectedMetal === metal.value
+                                      ? 'brightness(1.1) saturate(1.3)'
                                       : 'brightness(0.85) saturate(0.9)',
                                     transition: 'all 0.3s'
                                   }}
@@ -1010,7 +1011,7 @@ export function CustomDesign() {
                                   inset: 0,
                                   background: `linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.85) 100%)`
                                 }} />
-                                
+
                                 {/* Metal color indicator */}
                                 <div style={{
                                   position: 'absolute',
@@ -1056,17 +1057,17 @@ export function CustomDesign() {
                                   padding: '12px 8px',
                                   textAlign: 'center'
                                 }}>
-                                  <div style={{ 
-                                    color: 'white', 
-                                    fontSize: '14px', 
+                                  <div style={{
+                                    color: 'white',
+                                    fontSize: '14px',
                                     fontWeight: '600',
                                     marginBottom: '4px',
                                     textShadow: '0 2px 4px rgba(0,0,0,0.8)'
                                   }}>
                                     {metal.label}
                                   </div>
-                                  <div style={{ 
-                                    color: 'rgb(251, 191, 36)', 
+                                  <div style={{
+                                    color: 'rgb(251, 191, 36)',
                                     fontSize: '16px',
                                     fontWeight: 'bold',
                                     textShadow: '0 2px 4px rgba(0,0,0,0.8)'
@@ -1117,11 +1118,11 @@ export function CustomDesign() {
                               }}
                               style={{
                                 padding: '20px 16px',
-                                background: selectedGemType === type.value 
+                                background: selectedGemType === type.value
                                   ? type.gradient
                                   : 'rgba(255, 255, 255, 0.05)',
-                                border: selectedGemType === type.value 
-                                  ? '2px solid rgb(251, 191, 36)' 
+                                border: selectedGemType === type.value
+                                  ? '2px solid rgb(251, 191, 36)'
                                   : '1px solid rgba(255, 255, 255, 0.2)',
                                 borderRadius: '10px',
                                 color: 'white',
@@ -1199,8 +1200,8 @@ export function CustomDesign() {
                               style={{
                                 padding: '0',
                                 backgroundColor: 'transparent',
-                                border: selectedGemstone === gem.value 
-                                  ? '3px solid rgb(251, 191, 36)' 
+                                border: selectedGemstone === gem.value
+                                  ? '3px solid rgb(251, 191, 36)'
                                   : '2px solid rgba(255, 255, 255, 0.2)',
                                 borderRadius: '12px',
                                 cursor: 'pointer',
@@ -1231,8 +1232,8 @@ export function CustomDesign() {
                                     height: '100%',
                                     objectFit: 'cover',
                                     objectPosition: 'center',
-                                    filter: selectedGemstone === gem.value 
-                                      ? 'brightness(1.2) saturate(1.4)' 
+                                    filter: selectedGemstone === gem.value
+                                      ? 'brightness(1.2) saturate(1.4)'
                                       : 'brightness(0.8) saturate(1)',
                                     transition: 'all 0.3s'
                                   }}
@@ -1289,18 +1290,18 @@ export function CustomDesign() {
                                   padding: '12px 8px',
                                   textAlign: 'center'
                                 }}>
-                                  <div style={{ 
-                                    fontSize: '14px', 
-                                    fontWeight: '600', 
+                                  <div style={{
+                                    fontSize: '14px',
+                                    fontWeight: '600',
                                     marginBottom: '4px',
                                     color: 'white',
                                     textShadow: '0 2px 4px rgba(0,0,0,0.9)'
                                   }}>
                                     {gem.label}
                                   </div>
-                                  <div style={{ 
-                                    fontSize: '13px', 
-                                    color: 'rgb(251, 191, 36)', 
+                                  <div style={{
+                                    fontSize: '13px',
+                                    color: 'rgb(251, 191, 36)',
                                     fontWeight: 'bold',
                                     textShadow: '0 2px 4px rgba(0,0,0,0.9)'
                                   }}>
@@ -1337,7 +1338,7 @@ export function CustomDesign() {
                             (Optional +$150)
                           </span>
                         </label>
-                        
+
                         <div style={{
                           backgroundColor: 'rgba(255, 255, 255, 0.05)',
                           border: '1px solid rgba(255, 255, 255, 0.2)',
@@ -1361,11 +1362,11 @@ export function CustomDesign() {
                               }}
                               style={{
                                 padding: '16px 20px',
-                                background: designMode === 'draw' 
+                                background: designMode === 'draw'
                                   ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(202, 138, 4, 0.3) 100%)'
                                   : 'rgba(255, 255, 255, 0.05)',
-                                border: designMode === 'draw' 
-                                  ? '2px solid rgb(251, 191, 36)' 
+                                border: designMode === 'draw'
+                                  ? '2px solid rgb(251, 191, 36)'
                                   : '1px solid rgba(255, 255, 255, 0.2)',
                                 borderRadius: '10px',
                                 color: 'white',
@@ -1379,7 +1380,7 @@ export function CustomDesign() {
                               <div style={{ fontSize: '28px', marginBottom: '8px' }}>✏️</div>
                               <div>Freehand Draw</div>
                             </motion.button>
-                            
+
                             <motion.button
                               whileHover={{ scale: 1.03 }}
                               whileTap={{ scale: 0.97 }}
@@ -1398,11 +1399,11 @@ export function CustomDesign() {
                               }}
                               style={{
                                 padding: '16px 20px',
-                                background: designMode === 'shapes' 
+                                background: designMode === 'shapes'
                                   ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(202, 138, 4, 0.3) 100%)'
                                   : 'rgba(255, 255, 255, 0.05)',
-                                border: designMode === 'shapes' 
-                                  ? '2px solid rgb(251, 191, 36)' 
+                                border: designMode === 'shapes'
+                                  ? '2px solid rgb(251, 191, 36)'
                                   : '1px solid rgba(255, 255, 255, 0.2)',
                                 borderRadius: '10px',
                                 color: 'white',
@@ -1426,11 +1427,11 @@ export function CustomDesign() {
                               }}
                               style={{
                                 padding: '16px 20px',
-                                background: designMode === 'upload' 
+                                background: designMode === 'upload'
                                   ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(202, 138, 4, 0.3) 100%)'
                                   : 'rgba(255, 255, 255, 0.05)',
-                                border: designMode === 'upload' 
-                                  ? '2px solid rgb(251, 191, 36)' 
+                                border: designMode === 'upload'
+                                  ? '2px solid rgb(251, 191, 36)'
                                   : '1px solid rgba(255, 255, 255, 0.2)',
                                 borderRadius: '10px',
                                 color: 'white',
@@ -1495,11 +1496,11 @@ export function CustomDesign() {
                                         width: '100%',
                                         padding: '12px',
                                         marginBottom: '8px',
-                                        backgroundColor: selectedShape === shape.value 
-                                          ? 'rgba(251, 191, 36, 0.3)' 
+                                        backgroundColor: selectedShape === shape.value
+                                          ? 'rgba(251, 191, 36, 0.3)'
                                           : 'rgba(255, 255, 255, 0.05)',
-                                        border: selectedShape === shape.value 
-                                          ? '2px solid rgb(251, 191, 36)' 
+                                        border: selectedShape === shape.value
+                                          ? '2px solid rgb(251, 191, 36)'
                                           : '1px solid rgba(255, 255, 255, 0.15)',
                                         borderRadius: '8px',
                                         color: 'white',
@@ -1550,7 +1551,7 @@ export function CustomDesign() {
                                         }}
                                         style={{
                                           padding: '10px 16px',
-                                          background: drawMode === 'pen' 
+                                          background: drawMode === 'pen'
                                             ? 'linear-gradient(135deg, rgb(251, 191, 36), rgb(202, 138, 4))'
                                             : 'rgba(0, 0, 0, 0.7)',
                                           border: drawMode === 'pen' ? 'none' : '1px solid rgba(255, 255, 255, 0.3)',
@@ -1567,7 +1568,7 @@ export function CustomDesign() {
                                       >
                                         ✏️ Pen
                                       </motion.button>
-                                      
+
                                       <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
@@ -1577,7 +1578,7 @@ export function CustomDesign() {
                                         }}
                                         style={{
                                           padding: '10px 16px',
-                                          background: drawMode === 'line' 
+                                          background: drawMode === 'line'
                                             ? 'linear-gradient(135deg, rgb(251, 191, 36), rgb(202, 138, 4))'
                                             : 'rgba(0, 0, 0, 0.7)',
                                           border: drawMode === 'line' ? 'none' : '1px solid rgba(255, 255, 255, 0.3)',
@@ -1594,7 +1595,7 @@ export function CustomDesign() {
                                       >
                                         📏 Line
                                       </motion.button>
-                                      
+
                                       <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
@@ -1604,7 +1605,7 @@ export function CustomDesign() {
                                         }}
                                         style={{
                                           padding: '10px 16px',
-                                          background: drawMode === 'eraser' 
+                                          background: drawMode === 'eraser'
                                             ? 'linear-gradient(135deg, rgb(251, 191, 36), rgb(202, 138, 4))'
                                             : 'rgba(0, 0, 0, 0.7)',
                                           border: drawMode === 'eraser' ? 'none' : '1px solid rgba(255, 255, 255, 0.3)',
@@ -1639,12 +1640,12 @@ export function CustomDesign() {
                                         height: 'auto',
                                         display: 'block',
                                         pointerEvents: designMode === 'draw' ? 'auto' : 'none',
-                                        cursor: designMode === 'draw' 
+                                        cursor: designMode === 'draw'
                                           ? (drawMode === 'eraser' ? 'cell' : drawMode === 'line' ? 'crosshair' : 'crosshair')
                                           : 'default'
                                       }}
                                     />
-                                    
+
                                     {/* Foreground canvas for shapes */}
                                     <canvas
                                       ref={canvasRef}
@@ -1662,7 +1663,7 @@ export function CustomDesign() {
                                       }}
                                     />
                                   </div>
-                                  
+
                                   {/* Action Buttons */}
                                   <div style={{
                                     position: 'absolute',
@@ -1715,7 +1716,7 @@ export function CustomDesign() {
                                         🗑️ Delete
                                       </motion.button>
                                     )}
-                                    
+
                                     {/* Clear All Button */}
                                     <motion.button
                                       whileHover={{ scale: 1.05 }}
@@ -1745,15 +1746,15 @@ export function CustomDesign() {
                                     backgroundColor: 'rgba(0, 0, 0, 0.4)',
                                     borderTop: '1px solid rgba(255, 255, 255, 0.1)'
                                   }}>
-                                    {designMode === 'draw' 
-                                      ? (drawMode === 'pen' 
-                                          ? '✨ Draw your custom jewelry design with your mouse or touch!' 
-                                          : drawMode === 'line'
+                                    {designMode === 'draw'
+                                      ? (drawMode === 'pen'
+                                        ? '✨ Draw your custom jewelry design with your mouse or touch!'
+                                        : drawMode === 'line'
                                           ? '📏 Click two points to draw a straight line!'
                                           : '🧹 Use eraser to remove parts of your drawing!')
                                       : (selectedShapeIndex !== null
-                                          ? '💎 Drag to move • Drag edge to resize • Click Delete to remove!'
-                                          : '💎 Click shapes to add them • Click a shape to select • Drag edge to resize!')}
+                                        ? '💎 Drag to move • Drag edge to resize • Click Delete to remove!'
+                                        : '💎 Click shapes to add them • Click a shape to select • Drag edge to resize!')}
                                   </div>
                                 </motion.div>
                               </div>
@@ -1777,14 +1778,14 @@ export function CustomDesign() {
                                   transition: 'all 0.3s',
                                   backgroundColor: 'rgba(0, 0, 0, 0.2)'
                                 }}
-                                onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = 'rgba(251, 191, 36, 0.1)';
-                                  e.currentTarget.style.borderColor = 'rgb(251, 191, 36)';
-                                }}
-                                onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
-                                  e.currentTarget.style.borderColor = 'rgba(251, 191, 36, 0.5)';
-                                }}
+                                  onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor = 'rgba(251, 191, 36, 0.1)';
+                                    e.currentTarget.style.borderColor = 'rgb(251, 191, 36)';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+                                    e.currentTarget.style.borderColor = 'rgba(251, 191, 36, 0.5)';
+                                  }}
                                 >
                                   <div style={{ fontSize: '64px', marginBottom: '16px' }}>📤</div>
                                   <div style={{ color: 'white', fontSize: '18px', fontWeight: '600', marginBottom: '8px' }}>
@@ -1897,11 +1898,11 @@ export function CustomDesign() {
                               style={{
                                 width: '90px',
                                 height: '90px',
-                                backgroundColor: selectedSize === size.value 
-                                  ? 'rgba(251, 191, 36, 0.3)' 
+                                backgroundColor: selectedSize === size.value
+                                  ? 'rgba(251, 191, 36, 0.3)'
                                   : 'rgba(255, 255, 255, 0.05)',
-                                border: selectedSize === size.value 
-                                  ? '3px solid rgb(251, 191, 36)' 
+                                border: selectedSize === size.value
+                                  ? '3px solid rgb(251, 191, 36)'
                                   : '2px solid rgba(255, 255, 255, 0.2)',
                                 borderRadius: '12px',
                                 color: 'white',
@@ -1920,8 +1921,8 @@ export function CustomDesign() {
                               }}
                             >
                               <div>{size.value}</div>
-                              <div style={{ 
-                                fontSize: '12px', 
+                              <div style={{
+                                fontSize: '12px',
                                 color: 'rgb(251, 191, 36)',
                                 fontWeight: '600'
                               }}>
@@ -1966,8 +1967,8 @@ export function CustomDesign() {
                             width: '100%',
                             padding: '16px 20px',
                             backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                            border: engravingText 
-                              ? '2px solid rgba(251, 191, 36, 0.5)' 
+                            border: engravingText
+                              ? '2px solid rgba(251, 191, 36, 0.5)'
                               : '1px solid rgba(255, 255, 255, 0.2)',
                             borderRadius: '10px',
                             color: 'white',
@@ -1986,20 +1987,20 @@ export function CustomDesign() {
                             e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
                           }}
                         />
-                        <div style={{ 
+                        <div style={{
                           display: 'flex',
                           justifyContent: 'space-between',
                           alignItems: 'center',
                           marginTop: '8px'
                         }}>
-                          <div style={{ 
-                            color: 'rgba(255, 255, 255, 0.5)', 
+                          <div style={{
+                            color: 'rgba(255, 255, 255, 0.5)',
                             fontSize: '12px'
                           }}>
                             💡 Make it personal - add names, dates, or special words
                           </div>
-                          <div style={{ 
-                            color: engravingText.length > 25 ? 'rgb(251, 191, 36)' : 'rgba(255, 255, 255, 0.5)', 
+                          <div style={{
+                            color: engravingText.length > 25 ? 'rgb(251, 191, 36)' : 'rgba(255, 255, 255, 0.5)',
                             fontSize: '13px',
                             fontWeight: '600'
                           }}>
@@ -2049,9 +2050,9 @@ export function CustomDesign() {
                             pointerEvents: 'none'
                           }}
                         />
-                        <div style={{ 
-                          color: 'rgba(255, 255, 255, 0.8)', 
-                          fontSize: '14px', 
+                        <div style={{
+                          color: 'rgba(255, 255, 255, 0.8)',
+                          fontSize: '14px',
                           marginBottom: '12px',
                           textTransform: 'uppercase',
                           letterSpacing: '2px',
@@ -2059,7 +2060,7 @@ export function CustomDesign() {
                         }}>
                           Estimated Price
                         </div>
-                        <motion.div 
+                        <motion.div
                           key={estimatedPrice}
                           initial={{ scale: 1.2, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
@@ -2078,8 +2079,8 @@ export function CustomDesign() {
                         >
                           ${estimatedPrice}
                         </motion.div>
-                        <div style={{ 
-                          color: 'rgba(255, 255, 255, 0.6)', 
+                        <div style={{
+                          color: 'rgba(255, 255, 255, 0.6)',
                           fontSize: '12px',
                           fontStyle: 'italic'
                         }}>
@@ -2104,10 +2105,10 @@ export function CustomDesign() {
                     onClick={() => {
                       if (selectedCategory && selectedMetal && selectedSize) {
                         const metal = metals.find(m => m.value === selectedMetal);
-                        const gem = selectedGemType && selectedGemType !== 'none' 
+                        const gem = selectedGemType && selectedGemType !== 'none'
                           ? gemstones[selectedGemType as keyof typeof gemstones]?.find(g => g.value === selectedGemstone)
                           : undefined;
-                        
+
                         addToCart({
                           id: `custom-${Date.now()}`,
                           category: selectedCategory,
@@ -2121,7 +2122,7 @@ export function CustomDesign() {
                           designMode: designMode || undefined,
                           estimatedPrice: estimatedPrice
                         });
-                        
+
                         setToastMessage('Custom design added to cart!');
                         setShowToast(true);
                         setTimeout(() => {
@@ -2134,15 +2135,15 @@ export function CustomDesign() {
                       background: (!selectedCategory || !selectedMetal || !selectedSize)
                         ? 'rgba(150, 150, 150, 0.3)'
                         : 'linear-gradient(to right, rgb(251, 191, 36), rgb(202, 138, 4))',
-                      color: (!selectedCategory || !selectedMetal || !selectedSize) 
-                        ? 'rgba(255, 255, 255, 0.4)' 
+                      color: (!selectedCategory || !selectedMetal || !selectedSize)
+                        ? 'rgba(255, 255, 255, 0.4)'
                         : 'black',
                       fontWeight: '500',
                       fontSize: '18px',
                       borderRadius: '8px',
                       border: 'none',
-                      cursor: (!selectedCategory || !selectedMetal || !selectedSize) 
-                        ? 'not-allowed' 
+                      cursor: (!selectedCategory || !selectedMetal || !selectedSize)
+                        ? 'not-allowed'
                         : 'pointer',
                       transition: 'all 0.3s ease',
                       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
@@ -2156,20 +2157,20 @@ export function CustomDesign() {
                       e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
                     }}
                   >
-                    {(!selectedCategory || !selectedMetal || !selectedSize) 
-                      ? 'Complete Your Design' 
+                    {(!selectedCategory || !selectedMetal || !selectedSize)
+                      ? 'Complete Your Design'
                       : 'Add to Cart & Continue'}
                   </motion.button>
 
-                  <p style={{ 
+                  <p style={{
                     marginTop: '24px',
-                    color: 'rgba(255, 255, 255, 0.7)', 
-                    fontSize: '14px' 
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    fontSize: '14px'
                   }}>
                     Have questions?{' '}
-                    <a 
-                      href="#contact" 
-                      style={{ 
+                    <Link
+                      to="/contact"
+                      style={{
                         color: 'rgb(251, 191, 36)',
                         textDecoration: 'none',
                         fontWeight: '500',
@@ -2179,7 +2180,7 @@ export function CustomDesign() {
                       onMouseLeave={(e) => e.currentTarget.style.color = 'rgb(251, 191, 36)'}
                     >
                       Contact our design team
-                    </a>
+                    </Link>
                   </p>
                 </motion.div>
               </div>
@@ -2190,8 +2191,8 @@ export function CustomDesign() {
 
       {/* Footer */}
       <Footer />
-      
-      <Toast 
+
+      <Toast
         message={toastMessage}
         show={showToast}
         onClose={() => setShowToast(false)}

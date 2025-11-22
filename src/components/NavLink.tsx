@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
+import { Link } from 'react-router-dom';
 
 interface NavLinkProps {
   label: string;
@@ -10,8 +11,8 @@ export function NavLink({ label, href = '#' }: NavLinkProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
       className="relative cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -20,7 +21,7 @@ export function NavLink({ label, href = '#' }: NavLinkProps) {
       <span className="text-white transition-colors">
         {label}
       </span>
-      
+
       {/* Animated underline */}
       <motion.div
         initial={{ scaleX: 0 }}
@@ -28,6 +29,6 @@ export function NavLink({ label, href = '#' }: NavLinkProps) {
         transition={{ duration: 0.3, ease: "easeOut" }}
         className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-amber-400 to-yellow-600 origin-center"
       />
-    </a>
+    </Link>
   );
 }

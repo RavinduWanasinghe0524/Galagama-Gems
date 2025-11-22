@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { NavLink } from './NavLink';
 import logoImage from '../assets/f9f3557d671d8125a616ddcb69e2a0d761511cdc.png';
 import { useCart } from '../context/CartContext';
+import { Link } from 'react-router-dom';
 
 interface NavigationProps {
   isLoaded: boolean;
@@ -10,14 +11,14 @@ interface NavigationProps {
 export function Navigation({ isLoaded }: NavigationProps) {
   const { getTotalItems } = useCart();
   const cartItemCount = getTotalItems();
-  
+
   const navLinks = [
-    { label: 'Home', href: '#' },
-    { label: 'Custom Design', href: '#custom-design' },
-    { label: 'Packages', href: '#packages' },
-    { label: 'Marketplace', href: '#marketplace' },
-    { label: 'About', href: '#about' },
-    { label: 'Contact', href: '#contact' }
+    { label: 'Home', href: '/' },
+    { label: 'Custom Design', href: '/custom-design' },
+    { label: 'Packages', href: '/packages' },
+    { label: 'Marketplace', href: '/marketplace' },
+    { label: 'About', href: '/about' },
+    { label: 'Contact', href: '/contact' }
   ];
 
   return (
@@ -29,17 +30,17 @@ export function Navigation({ isLoaded }: NavigationProps) {
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="flex items-center">
-          <img 
-            src={logoImage} 
-            alt="Galagama Gems" 
+        <Link to="/" className="flex items-center">
+          <img
+            src={logoImage}
+            alt="Galagama Gems"
             className="h-16 w-auto"
             style={{
               mixBlendMode: 'screen',
               filter: 'brightness(1.2) contrast(1.1)'
             }}
           />
-        </a>
+        </Link>
 
         {/* Navigation Links */}
         <div className="hidden md:flex items-center space-x-8">
@@ -50,8 +51,8 @@ export function Navigation({ isLoaded }: NavigationProps) {
 
         {/* Login/Sign Up & Cart */}
         <div className="hidden md:flex items-center space-x-4">
-          <a 
-            href="#cart" 
+          <Link
+            to="/cart"
             className="text-white hover:text-amber-400 transition-colors relative"
             style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
           >
@@ -79,13 +80,13 @@ export function Navigation({ isLoaded }: NavigationProps) {
                 {cartItemCount}
               </motion.span>
             )}
-          </a>
-          <a href="#login" className="text-white hover:text-amber-400 transition-colors">
+          </Link>
+          <Link to="/login" className="text-white hover:text-amber-400 transition-colors">
             Login
-          </a>
-          <a href="#signup" className="px-4 py-2 border border-white/30 rounded text-white hover:bg-white/10 transition-all inline-block">
+          </Link>
+          <Link to="/signup" className="px-4 py-2 border border-white/30 rounded text-white hover:bg-white/10 transition-all inline-block">
             Sign Up
-          </a>
+          </Link>
         </div>
       </div>
     </motion.nav>
