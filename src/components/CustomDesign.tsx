@@ -38,13 +38,27 @@ export function CustomDesign() {
   const [selectedSize, setSelectedSize] = useState('');
   const [estimatedPrice, setEstimatedPrice] = useState(0);
 
+  // Canvas State & Refs for Smoothness
+  const [selectedColor, setSelectedColor] = useState('#FBBF24'); // Default Gold
+  const [strokeWidth, setStrokeWidth] = useState(3);
+  const [showGrid, setShowGrid] = useState(true);
+  
+  // Refs for performance (avoid re-renders during drawing)
+  const pathsRef = useRef<any[]>([]);
+  const currentPathRef = useRef<any[]>([]);
+  const isDrawingRef = useRef(false);
+  
+  // History for Undo/Redo
+  const historyRef = useRef<any[][]>([]);
+  const historyStepRef = useRef(-1);
+
+  // Existing state
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const backgroundCanvasRef = useRef<HTMLCanvasElement>(null); // For drawings
+  const backgroundCanvasRef = useRef<HTMLCanvasElement>(null);
   const [uploadedDesign, setUploadedDesign] = useState<string | null>(null);
   const [designMode, setDesignMode] = useState<'draw' | 'shapes' | 'upload' | null>(null);
   const [selectedShape, setSelectedShape] = useState<string | null>(null);
   const [drawnShapes, setDrawnShapes] = useState<any[]>([]);
-  const [isCanvasDrawing, setIsCanvasDrawing] = useState(false);
   const [drawMode, setDrawMode] = useState<'pen' | 'eraser' | 'line'>('pen');
   const [selectedShapeIndex, setSelectedShapeIndex] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -233,84 +247,188 @@ export function CustomDesign() {
   ];
 
   // Canvas drawing setup with eraser and line tool - draws on background layer
-  useEffect(() => {
-    const canvas = backgroundCanvasRef.current;
-    if (!canvas || !isCanvasDrawing) return;
+  // History Management
+  const saveHistory = () => {
+    const newHistory = historyRef.current.slice(0, historyStepRef.current + 1);
+    newHistory.push(JSON.parse(JSON.stringify(pathsRef.current)));
+    historyRef.current = newHistory;
+    historyStepRef.current = newHistory.length - 1;
+  };
 
+  const undo = () => {
+    if (historyStepRef.current >= 0) {
+      historyStepRef.current--;
+      if (historyStepRef.current >= 0) {
+        pathsRef.current = JSON.parse(JSON.stringify(historyRef.current[historyStepRef.current]));
+      } else {
+        pathsRef.current = [];
+      }
+    }
+  };
+
+  const redo = () => {
+    if (historyStepRef.current < historyRef.current.length - 1) {
+      historyStepRef.current++;
+      pathsRef.current = JSON.parse(JSON.stringify(historyRef.current[historyStepRef.current]));
+    }
+  };
+
+  // Render Loop
+  const renderCanvas = () => {
+    const canvas = backgroundCanvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let drawing = false;
-    let lastX = 0;
-    let lastY = 0;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw Grid
+    if (showGrid) {
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.lineWidth = 1;
+      const gridSize = 50;
+      for (let x = 0; x <= canvas.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y <= canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+    }
+
+    // Draw Saved Paths
+    pathsRef.current.forEach(path => {
+      if (path.points.length < 2 && path.mode !== 'dot') return;
+      ctx.beginPath();
+      ctx.strokeStyle = path.color;
+      ctx.lineWidth = path.width;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.globalCompositeOperation = path.mode === 'eraser' ? 'destination-out' : 'source-over';
+      
+      if (path.points.length > 0) {
+        ctx.moveTo(path.points[0].x, path.points[0].y);
+        for (let i = 1; i < path.points.length; i++) {
+          ctx.lineTo(path.points[i].x, path.points[i].y);
+        }
+      }
+      ctx.stroke();
+    });
+
+    // Draw Current Path
+    if (currentPathRef.current.length > 0) {
+      ctx.beginPath();
+      ctx.strokeStyle = drawMode === 'eraser' ? 'rgba(0,0,0,1)' : selectedColor;
+      ctx.lineWidth = strokeWidth;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.globalCompositeOperation = drawMode === 'eraser' ? 'destination-out' : 'source-over';
+
+      if (drawMode === 'line' && lineStart) {
+         ctx.moveTo(lineStart.x, lineStart.y);
+         const lastPoint = currentPathRef.current[currentPathRef.current.length - 1];
+         ctx.lineTo(lastPoint.x, lastPoint.y);
+      } else {
+        ctx.moveTo(currentPathRef.current[0].x, currentPathRef.current[0].y);
+        for (let i = 1; i < currentPathRef.current.length; i++) {
+          ctx.lineTo(currentPathRef.current[i].x, currentPathRef.current[i].y);
+        }
+      }
+      ctx.stroke();
+    }
+    
+    ctx.globalCompositeOperation = 'source-over';
+  };
+
+  // Animation Loop
+  useEffect(() => {
+    let animationFrameId: number;
+    const loop = () => {
+      renderCanvas();
+      animationFrameId = requestAnimationFrame(loop);
+    };
+    loop();
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [selectedColor, strokeWidth, showGrid, drawMode, lineStart]);
+
+  // Drawing Event Handlers
+  useEffect(() => {
+    const canvas = backgroundCanvasRef.current;
+    if (!canvas) return;
+
+    const getPos = (e: MouseEvent | TouchEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = 'touches' in e ? (e as TouchEvent).touches[0].clientX : (e as MouseEvent).clientX;
+      const clientY = 'touches' in e ? (e as TouchEvent).touches[0].clientY : (e as MouseEvent).clientY;
+      return {
+        x: (clientX - rect.left) * (canvas.width / rect.width),
+        y: (clientY - rect.top) * (canvas.height / rect.height)
+      };
+    };
 
     const startDrawing = (e: MouseEvent | TouchEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      const x = (clientX - rect.left) * (canvas.width / rect.width);
-      const y = (clientY - rect.top) * (canvas.height / rect.height);
-
+      if (designMode !== 'draw') return;
+      e.preventDefault();
+      isDrawingRef.current = true;
+      const pos = getPos(e);
+      
       if (drawMode === 'line') {
         if (!lineStart) {
-          setLineStart({ x, y });
+          setLineStart(pos);
+          currentPathRef.current = [pos];
         } else {
-          // Draw line from lineStart to current position
-          ctx.strokeStyle = '#FBB040';
-          ctx.lineWidth = 4;
-          ctx.lineCap = 'round';
-          ctx.shadowBlur = 2;
-          ctx.shadowColor = '#FBB040';
-          ctx.beginPath();
-          ctx.moveTo(lineStart.x, lineStart.y);
-          ctx.lineTo(x, y);
-          ctx.stroke();
+          const newPath = {
+            points: [lineStart, pos],
+            color: selectedColor,
+            width: strokeWidth,
+            mode: 'pen'
+          };
+          pathsRef.current.push(newPath);
+          saveHistory();
           setLineStart(null);
+          currentPathRef.current = [];
+          isDrawingRef.current = false;
         }
       } else {
-        drawing = true;
-        lastX = x;
-        lastY = y;
+        currentPathRef.current = [pos];
       }
     };
 
     const draw = (e: MouseEvent | TouchEvent) => {
-      if (!drawing || drawMode === 'line') return;
+      if (!isDrawingRef.current || designMode !== 'draw') return;
       e.preventDefault();
+      const pos = getPos(e);
 
-      const rect = canvas.getBoundingClientRect();
-      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      const currentX = (clientX - rect.left) * (canvas.width / rect.width);
-      const currentY = (clientY - rect.top) * (canvas.height / rect.height);
-
-      if (drawMode === 'eraser') {
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.lineWidth = 20;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
+      if (drawMode === 'line') {
+        if (lineStart) {
+           currentPathRef.current = [lineStart, pos];
+        }
       } else {
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.strokeStyle = '#FBB040';
-        ctx.lineWidth = 4;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.shadowBlur = 2;
-        ctx.shadowColor = '#FBB040';
+        currentPathRef.current.push(pos);
       }
-
-      ctx.beginPath();
-      ctx.moveTo(lastX, lastY);
-      ctx.lineTo(currentX, currentY);
-      ctx.stroke();
-
-      lastX = currentX;
-      lastY = currentY;
     };
 
     const stopDrawing = () => {
-      drawing = false;
-      ctx.globalCompositeOperation = 'source-over';
+      if (!isDrawingRef.current || designMode !== 'draw') return;
+      if (drawMode === 'line') return; 
+      
+      isDrawingRef.current = false;
+      if (currentPathRef.current.length > 0) {
+        const newPath = {
+          points: [...currentPathRef.current],
+          color: selectedColor,
+          width: strokeWidth,
+          mode: drawMode
+        };
+        pathsRef.current.push(newPath);
+        saveHistory();
+        currentPathRef.current = [];
+      }
     };
 
     canvas.addEventListener('mousedown', startDrawing);
@@ -330,9 +448,9 @@ export function CustomDesign() {
       canvas.removeEventListener('touchmove', draw);
       canvas.removeEventListener('touchend', stopDrawing);
     };
-  }, [isCanvasDrawing, drawMode, lineStart]);
+  }, [designMode, drawMode, selectedColor, strokeWidth, lineStart]);
 
-  // Separate effect for shapes mode interaction with improved dragging
+  // Shape Interaction
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || designMode !== 'shapes') return;
@@ -351,7 +469,7 @@ export function CustomDesign() {
 
     const isNearEdge = (mouseX: number, mouseY: number, shapeX: number, shapeY: number, size: number) => {
       const distance = getDistance(mouseX, mouseY, shapeX, shapeY);
-      return Math.abs(distance - size / 2) < 20; // Increased threshold to 20px for easier interaction
+      return Math.abs(distance - size / 2) < 20; 
     };
 
     const handleMouseDown = (e: MouseEvent) => {
@@ -359,12 +477,10 @@ export function CustomDesign() {
       const clickX = (e.clientX - rect.left) * (canvas.width / rect.width);
       const clickY = (e.clientY - rect.top) * (canvas.height / rect.height);
 
-      // Check if clicked on any shape (from top to bottom)
       for (let i = drawnShapes.length - 1; i >= 0; i--) {
         const { x, y, size = 80 } = drawnShapes[i];
         const distance = getDistance(clickX, clickY, x, y);
 
-        // Check if near edge (for resizing) - more lenient threshold
         if (isNearEdge(clickX, clickY, x, y, size)) {
           setSelectedShapeIndex(i);
           resizing = true;
@@ -376,13 +492,11 @@ export function CustomDesign() {
           return;
         }
 
-        // Check if inside shape (for moving)
         if (distance < size / 2) {
           setSelectedShapeIndex(i);
           dragging = true;
           setIsDragging(true);
           dragIndex = i;
-          // Store offset from shape center for smooth dragging
           offsetX = clickX - x;
           offsetY = clickY - y;
           e.preventDefault();
@@ -398,7 +512,6 @@ export function CustomDesign() {
       const mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
       const mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
 
-      // Change cursor when hovering near edge
       if (!dragging && !resizing && selectedShapeIndex !== null) {
         const { x, y, size = 80 } = drawnShapes[selectedShapeIndex];
         if (isNearEdge(mouseX, mouseY, x, y, size)) {
@@ -428,7 +541,6 @@ export function CustomDesign() {
         });
       } else if (dragging && dragIndex !== null) {
         e.preventDefault();
-        // Use offset for smooth dragging without jumps
         const newX = mouseX - offsetX;
         const newY = mouseY - offsetY;
 
@@ -1559,88 +1671,136 @@ export function CustomDesign() {
                                       top: '12px',
                                       left: '12px',
                                       display: 'flex',
-                                      gap: '8px',
-                                      zIndex: 10
+                                      flexDirection: 'column',
+                                      gap: '12px',
+                                      zIndex: 10,
+                                      background: 'rgba(0, 0, 0, 0.6)',
+                                      backdropFilter: 'blur(10px)',
+                                      padding: '12px',
+                                      borderRadius: '12px',
+                                      border: '1px solid rgba(255, 255, 255, 0.1)'
                                     }}>
-                                      <motion.button
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        onClick={() => {
-                                          setDrawMode('pen');
-                                          setLineStart(null);
-                                        }}
-                                        style={{
-                                          padding: '10px 16px',
-                                          background: drawMode === 'pen'
-                                            ? 'linear-gradient(135deg, rgb(251, 191, 36), rgb(202, 138, 4))'
-                                            : 'rgba(0, 0, 0, 0.7)',
-                                          border: drawMode === 'pen' ? 'none' : '1px solid rgba(255, 255, 255, 0.3)',
-                                          borderRadius: '8px',
-                                          color: 'white',
-                                          cursor: 'pointer',
-                                          fontSize: '13px',
-                                          fontWeight: '600',
-                                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-                                          display: 'flex',
-                                          alignItems: 'center',
-                                          gap: '6px'
-                                        }}
-                                      >
-                                        ✏️ Pen
-                                      </motion.button>
+                                      {/* Tools */}
+                                      <div style={{ display: 'flex', gap: '8px' }}>
+                                        {['pen', 'line', 'eraser'].map((mode) => (
+                                          <motion.button
+                                            key={mode}
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            onClick={() => {
+                                              setDrawMode(mode as any);
+                                              setLineStart(null);
+                                            }}
+                                            style={{
+                                              padding: '8px',
+                                              background: drawMode === mode ? 'rgba(251, 191, 36, 0.2)' : 'transparent',
+                                              border: drawMode === mode ? '1px solid rgb(251, 191, 36)' : '1px solid rgba(255, 255, 255, 0.2)',
+                                              borderRadius: '8px',
+                                              color: 'white',
+                                              cursor: 'pointer',
+                                              fontSize: '20px',
+                                              width: '40px',
+                                              height: '40px',
+                                              display: 'flex',
+                                              alignItems: 'center',
+                                              justifyContent: 'center'
+                                            }}
+                                            title={mode.charAt(0).toUpperCase() + mode.slice(1)}
+                                          >
+                                            {mode === 'pen' ? '✏️' : mode === 'line' ? '📏' : '🧹'}
+                                          </motion.button>
+                                        ))}
+                                      </div>
 
-                                      <motion.button
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        onClick={() => {
-                                          setDrawMode('line');
-                                          setLineStart(null);
-                                        }}
-                                        style={{
-                                          padding: '10px 16px',
-                                          background: drawMode === 'line'
-                                            ? 'linear-gradient(135deg, rgb(251, 191, 36), rgb(202, 138, 4))'
-                                            : 'rgba(0, 0, 0, 0.7)',
-                                          border: drawMode === 'line' ? 'none' : '1px solid rgba(255, 255, 255, 0.3)',
-                                          borderRadius: '8px',
-                                          color: 'white',
-                                          cursor: 'pointer',
-                                          fontSize: '13px',
-                                          fontWeight: '600',
-                                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-                                          display: 'flex',
-                                          alignItems: 'center',
-                                          gap: '6px'
-                                        }}
-                                      >
-                                        📏 Line
-                                      </motion.button>
+                                      {/* Colors */}
+                                      {drawMode !== 'eraser' && (
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px' }}>
+                                          {['#FBBF24', '#B76E79', '#C0C0C0', '#E5E4E2', '#EF4444', '#3B82F6', '#10B981', '#000000'].map((color) => (
+                                            <motion.button
+                                              key={color}
+                                              whileHover={{ scale: 1.1 }}
+                                              whileTap={{ scale: 0.9 }}
+                                              onClick={() => setSelectedColor(color)}
+                                              style={{
+                                                width: '24px',
+                                                height: '24px',
+                                                borderRadius: '50%',
+                                                backgroundColor: color,
+                                                border: selectedColor === color ? '2px solid white' : '2px solid transparent',
+                                                cursor: 'pointer',
+                                                boxShadow: selectedColor === color ? '0 0 0 2px rgb(251, 191, 36)' : 'none'
+                                              }}
+                                            />
+                                          ))}
+                                        </div>
+                                      )}
 
+                                      {/* Stroke Width */}
+                                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                        <label style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.6)' }}>Size: {strokeWidth}px</label>
+                                        <input
+                                          type="range"
+                                          min="1"
+                                          max="20"
+                                          value={strokeWidth}
+                                          onChange={(e) => setStrokeWidth(parseInt(e.target.value))}
+                                          style={{ width: '100%', accentColor: '#FBBF24' }}
+                                        />
+                                      </div>
+
+                                      {/* Actions */}
+                                      <div style={{ display: 'flex', gap: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '8px' }}>
+                                        <motion.button
+                                          whileHover={{ scale: 1.05 }}
+                                          whileTap={{ scale: 0.95 }}
+                                          onClick={undo}
+                                          style={{
+                                            flex: 1,
+                                            padding: '6px',
+                                            background: 'rgba(255, 255, 255, 0.1)',
+                                            border: 'none',
+                                            borderRadius: '6px',
+                                            color: 'white',
+                                            cursor: 'pointer',
+                                            fontSize: '12px'
+                                          }}
+                                        >
+                                          ↩️ Undo
+                                        </motion.button>
+                                        <motion.button
+                                          whileHover={{ scale: 1.05 }}
+                                          whileTap={{ scale: 0.95 }}
+                                          onClick={redo}
+                                          style={{
+                                            flex: 1,
+                                            padding: '6px',
+                                            background: 'rgba(255, 255, 255, 0.1)',
+                                            border: 'none',
+                                            borderRadius: '6px',
+                                            color: 'white',
+                                            cursor: 'pointer',
+                                            fontSize: '12px'
+                                          }}
+                                        >
+                                          ↪️ Redo
+                                        </motion.button>
+                                      </div>
+                                      
                                       <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
-                                        onClick={() => {
-                                          setDrawMode('eraser');
-                                          setLineStart(null);
-                                        }}
+                                        onClick={() => setShowGrid(!showGrid)}
                                         style={{
-                                          padding: '10px 16px',
-                                          background: drawMode === 'eraser'
-                                            ? 'linear-gradient(135deg, rgb(251, 191, 36), rgb(202, 138, 4))'
-                                            : 'rgba(0, 0, 0, 0.7)',
-                                          border: drawMode === 'eraser' ? 'none' : '1px solid rgba(255, 255, 255, 0.3)',
-                                          borderRadius: '8px',
+                                          padding: '6px',
+                                          background: showGrid ? 'rgba(251, 191, 36, 0.2)' : 'rgba(255, 255, 255, 0.1)',
+                                          border: showGrid ? '1px solid rgba(251, 191, 36, 0.5)' : 'none',
+                                          borderRadius: '6px',
                                           color: 'white',
                                           cursor: 'pointer',
-                                          fontSize: '13px',
-                                          fontWeight: '600',
-                                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-                                          display: 'flex',
-                                          alignItems: 'center',
-                                          gap: '6px'
+                                          fontSize: '12px'
                                         }}
                                       >
-                                        🧹 Eraser
+                                        {showGrid ? 'Grid On' : 'Grid Off'}
                                       </motion.button>
                                     </div>
                                   )}
