@@ -42,6 +42,8 @@ export function CustomDesign() {
   const [selectedColor, setSelectedColor] = useState('#FBBF24'); // Default Gold
   const [strokeWidth, setStrokeWidth] = useState(3);
   const [showGrid, setShowGrid] = useState(true);
+  const [is3DView, setIs3DView] = useState(false);
+  const [shapeMaterial, setShapeMaterial] = useState<'gold' | 'silver' | 'rose' | 'crystal'>('gold');
   
   // Refs for performance (avoid re-renders during drawing)
   const pathsRef = useRef<any[]>([]);
@@ -451,17 +453,37 @@ export function CustomDesign() {
   }, [designMode, drawMode, selectedColor, strokeWidth, lineStart]);
 
   // Shape Interaction
+  const dragStateRef = useRef<{
+    isDragging: boolean;
+    isResizing: boolean;
+    dragIndex: number | null;
+    offsetX: number;
+    offsetY: number;
+    initialSize: number;
+    resizeStartDist: number;
+    startX: number;
+    startY: number;
+  }>({
+    isDragging: false,
+    isResizing: false,
+    dragIndex: null,
+    offsetX: 0,
+    offsetY: 0,
+    initialSize: 0,
+    resizeStartDist: 0,
+    startX: 0,
+    startY: 0
+  });
+
+  // Keep a ref to drawnShapes to access latest without re-binding events
+  const shapesRef = useRef(drawnShapes);
+  useEffect(() => {
+    shapesRef.current = drawnShapes;
+  }, [drawnShapes]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || designMode !== 'shapes') return;
-
-    let dragging = false;
-    let resizing = false;
-    let dragIndex: number | null = null;
-    let offsetX = 0;
-    let offsetY = 0;
-    let initialSize = 0;
-    let resizeStartDist = 0;
 
     const getDistance = (x1: number, y1: number, x2: number, y2: number) => {
       return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
@@ -472,33 +494,48 @@ export function CustomDesign() {
       return Math.abs(distance - size / 2) < 20; 
     };
 
+    const snapToGrid = (value: number) => {
+      if (!showGrid) return value;
+      const gridSize = 20;
+      return Math.round(value / gridSize) * gridSize;
+    };
+
     const handleMouseDown = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
       const clickX = (e.clientX - rect.left) * (canvas.width / rect.width);
       const clickY = (e.clientY - rect.top) * (canvas.height / rect.height);
+      const currentShapes = shapesRef.current;
 
-      for (let i = drawnShapes.length - 1; i >= 0; i--) {
-        const { x, y, size = 80 } = drawnShapes[i];
+      for (let i = currentShapes.length - 1; i >= 0; i--) {
+        const { x, y, size = 80 } = currentShapes[i];
         const distance = getDistance(clickX, clickY, x, y);
 
         if (isNearEdge(clickX, clickY, x, y, size)) {
           setSelectedShapeIndex(i);
-          resizing = true;
           setIsResizing(true);
-          dragIndex = i;
-          initialSize = size;
-          resizeStartDist = distance;
+          dragStateRef.current = {
+            ...dragStateRef.current,
+            isResizing: true,
+            dragIndex: i,
+            initialSize: size,
+            resizeStartDist: distance
+          };
           e.preventDefault();
           return;
         }
 
         if (distance < size / 2) {
           setSelectedShapeIndex(i);
-          dragging = true;
           setIsDragging(true);
-          dragIndex = i;
-          offsetX = clickX - x;
-          offsetY = clickY - y;
+          dragStateRef.current = {
+            ...dragStateRef.current,
+            isDragging: true,
+            dragIndex: i,
+            offsetX: clickX - x,
+            offsetY: clickY - y,
+            startX: x,
+            startY: y
+          };
           e.preventDefault();
           return;
         }
@@ -511,9 +548,11 @@ export function CustomDesign() {
       const rect = canvas.getBoundingClientRect();
       const mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
       const mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
+      const { isDragging, isResizing, dragIndex, offsetX, offsetY, initialSize, resizeStartDist } = dragStateRef.current;
+      const currentShapes = shapesRef.current;
 
-      if (!dragging && !resizing && selectedShapeIndex !== null) {
-        const { x, y, size = 80 } = drawnShapes[selectedShapeIndex];
+      if (!isDragging && !isResizing && selectedShapeIndex !== null && currentShapes[selectedShapeIndex]) {
+        const { x, y, size = 80 } = currentShapes[selectedShapeIndex];
         if (isNearEdge(mouseX, mouseY, x, y, size)) {
           canvas.style.cursor = 'nwse-resize';
         } else if (getDistance(mouseX, mouseY, x, y) < size / 2) {
@@ -523,46 +562,45 @@ export function CustomDesign() {
         }
       }
 
-      if (resizing && dragIndex !== null) {
+      if (isResizing && dragIndex !== null) {
         e.preventDefault();
-        const { x, y } = drawnShapes[dragIndex];
+        const { x, y } = currentShapes[dragIndex];
         const currentDist = getDistance(mouseX, mouseY, x, y);
         const sizeDelta = (currentDist - resizeStartDist) * 2;
         const newSize = Math.max(30, Math.min(300, initialSize + sizeDelta));
 
-        const index = dragIndex;
-        setDrawnShapes(prev => {
-          const updated = [...prev];
-          updated[index] = {
-            ...updated[index],
-            size: newSize
-          };
-          return updated;
-        });
-      } else if (dragging && dragIndex !== null) {
+        // Update directly for smoothness
+        const updated = [...currentShapes];
+        updated[dragIndex] = { ...updated[dragIndex], size: newSize };
+        setDrawnShapes(updated);
+      } else if (isDragging && dragIndex !== null) {
         e.preventDefault();
-        const newX = mouseX - offsetX;
-        const newY = mouseY - offsetY;
+        let newX = mouseX - offsetX;
+        let newY = mouseY - offsetY;
 
-        const index = dragIndex;
-        setDrawnShapes(prev => {
-          const updated = [...prev];
-          updated[index] = {
-            ...updated[index],
-            x: newX,
-            y: newY
-          };
-          return updated;
-        });
+        // Apply Snap to Grid
+        if (showGrid) {
+          newX = snapToGrid(newX);
+          newY = snapToGrid(newY);
+        }
+
+        // Update directly for smoothness
+        const updated = [...currentShapes];
+        updated[dragIndex] = { ...updated[dragIndex], x: newX, y: newY };
+        setDrawnShapes(updated);
       }
     };
 
     const handleMouseUp = () => {
-      dragging = false;
-      resizing = false;
-      dragIndex = null;
+      dragStateRef.current = {
+        ...dragStateRef.current,
+        isDragging: false,
+        isResizing: false,
+        dragIndex: null
+      };
       setIsDragging(false);
       setIsResizing(false);
+      
       if (selectedShapeIndex !== null) {
         canvas.style.cursor = 'move';
       } else {
@@ -581,7 +619,7 @@ export function CustomDesign() {
       canvas.removeEventListener('mouseup', handleMouseUp);
       canvas.removeEventListener('mouseleave', handleMouseUp);
     };
-  }, [designMode, drawnShapes, selectedShapeIndex]);
+  }, [designMode, selectedShapeIndex, showGrid]);
 
   const clearCanvas = () => {
     const canvas = canvasRef.current;
@@ -648,13 +686,45 @@ export function CustomDesign() {
     drawnShapes.forEach((shapeData, index) => {
       const { shape, x, y, size = 80 } = shapeData;
 
-      ctx.fillStyle = selectedShapeIndex === index
-        ? 'rgba(251, 191, 36, 0.5)'
-        : 'rgba(251, 191, 36, 0.3)';
-      ctx.strokeStyle = selectedShapeIndex === index ? '#FFD700' : '#FBB040';
-      ctx.lineWidth = selectedShapeIndex === index ? 4 : 3;
-      ctx.shadowBlur = 10;
-      ctx.shadowColor = '#FBB040';
+      // Create 3D Gradient based on material
+      let gradient;
+      if (shapeMaterial === 'gold') {
+        gradient = ctx.createLinearGradient(x - size/2, y - size/2, x + size/2, y + size/2);
+        gradient.addColorStop(0, '#FBBF24');
+        gradient.addColorStop(0.3, '#FFF7ED');
+        gradient.addColorStop(0.6, '#D97706');
+        gradient.addColorStop(1, '#F59E0B');
+      } else if (shapeMaterial === 'silver') {
+        gradient = ctx.createLinearGradient(x - size/2, y - size/2, x + size/2, y + size/2);
+        gradient.addColorStop(0, '#E5E7EB');
+        gradient.addColorStop(0.3, '#FFFFFF');
+        gradient.addColorStop(0.6, '#9CA3AF');
+        gradient.addColorStop(1, '#D1D5DB');
+      } else if (shapeMaterial === 'rose') {
+        gradient = ctx.createLinearGradient(x - size/2, y - size/2, x + size/2, y + size/2);
+        gradient.addColorStop(0, '#FDA4AF');
+        gradient.addColorStop(0.3, '#FFF1F2');
+        gradient.addColorStop(0.6, '#BE123C');
+        gradient.addColorStop(1, '#FB7185');
+      } else {
+        // Crystal/Gem
+        gradient = ctx.createRadialGradient(x - size/4, y - size/4, size/10, x, y, size/2);
+        gradient.addColorStop(0, '#FFFFFF');
+        gradient.addColorStop(0.5, '#60A5FA');
+        gradient.addColorStop(1, '#1E3A8A');
+      }
+
+      ctx.fillStyle = gradient;
+      
+      // Add 3D Shadow/Glow
+      ctx.shadowColor = selectedShapeIndex === index ? '#FBBF24' : 'rgba(0,0,0,0.5)';
+      ctx.shadowBlur = selectedShapeIndex === index ? 20 : 10;
+      ctx.shadowOffsetX = 5;
+      ctx.shadowOffsetY = 5;
+
+      // Stroke for definition
+      ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+      ctx.lineWidth = 2;
 
       switch (shape) {
         case 'circle':
@@ -662,10 +732,24 @@ export function CustomDesign() {
           ctx.arc(x, y, size / 2, 0, Math.PI * 2);
           ctx.fill();
           ctx.stroke();
+          // Add highlight
+          ctx.beginPath();
+          ctx.arc(x - size/6, y - size/6, size/8, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255,255,255,0.6)';
+          ctx.fill();
           break;
         case 'square':
-          ctx.fillRect(x - size / 2, y - size / 2, size, size);
-          ctx.strokeRect(x - size / 2, y - size / 2, size, size);
+          ctx.beginPath();
+          ctx.rect(x - size / 2, y - size / 2, size, size);
+          ctx.fill();
+          ctx.stroke();
+          // Bevel effect
+          ctx.beginPath();
+          ctx.moveTo(x - size/2, y + size/2);
+          ctx.lineTo(x - size/2, y - size/2);
+          ctx.lineTo(x + size/2, y - size/2);
+          ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+          ctx.stroke();
           break;
         case 'triangle':
           ctx.beginPath();
@@ -684,6 +768,14 @@ export function CustomDesign() {
           ctx.lineTo(x - size / 2, y);
           ctx.closePath();
           ctx.fill();
+          ctx.stroke();
+          // Facet lines
+          ctx.beginPath();
+          ctx.moveTo(x, y - size/2);
+          ctx.lineTo(x, y + size/2);
+          ctx.moveTo(x - size/2, y);
+          ctx.lineTo(x + size/2, y);
+          ctx.strokeStyle = 'rgba(255,255,255,0.3)';
           ctx.stroke();
           break;
         case 'star':
@@ -748,8 +840,8 @@ export function CustomDesign() {
           // Center circle
           ctx.beginPath();
           ctx.arc(x, y, size / 8, 0, Math.PI * 2);
+          ctx.fillStyle = '#FFF';
           ctx.fill();
-          ctx.stroke();
           break;
         case 'moon':
           ctx.beginPath();
@@ -771,7 +863,7 @@ export function CustomDesign() {
     if (designMode === 'shapes') {
       redrawCanvas();
     }
-  }, [drawnShapes, selectedShapeIndex, designMode]);
+  }, [drawnShapes, selectedShapeIndex, designMode, shapeMaterial]);
 
   const addShapeToCanvas = (shape: string) => {
     const canvas = canvasRef.current;
@@ -1805,43 +1897,135 @@ export function CustomDesign() {
                                     </div>
                                   )}
 
-                                  {/* Layered Canvas System */}
-                                  <div style={{ position: 'relative', width: '100%', height: 'auto' }}>
-                                    {/* Background canvas for drawings */}
-                                    <canvas
-                                      ref={backgroundCanvasRef}
-                                      width={1000}
-                                      height={600}
-                                      style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: 0,
-                                        width: '100%',
-                                        height: 'auto',
-                                        display: 'block',
-                                        pointerEvents: designMode === 'draw' ? 'auto' : 'none',
-                                        cursor: designMode === 'draw'
-                                          ? (drawMode === 'eraser' ? 'cell' : drawMode === 'line' ? 'crosshair' : 'crosshair')
-                                          : 'default'
-                                      }}
-                                    />
+                                  {/* 3D Controls - Only for shapes mode */}
+                                  {designMode === 'shapes' && (
+                                    <div style={{
+                                      position: 'absolute',
+                                      top: '12px',
+                                      left: '12px',
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      gap: '12px',
+                                      zIndex: 10,
+                                      background: 'rgba(0, 0, 0, 0.6)',
+                                      backdropFilter: 'blur(10px)',
+                                      padding: '12px',
+                                      borderRadius: '12px',
+                                      border: '1px solid rgba(255, 255, 255, 0.1)'
+                                    }}>
+                                      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', fontWeight: '600' }}>MATERIAL</div>
+                                      <div style={{ display: 'flex', gap: '8px' }}>
+                                        {[
+                                          { id: 'gold', color: '#FBBF24', label: 'Gold' },
+                                          { id: 'silver', color: '#E5E7EB', label: 'Silver' },
+                                          { id: 'rose', color: '#FDA4AF', label: 'Rose' },
+                                          { id: 'crystal', color: '#60A5FA', label: 'Gem' }
+                                        ].map((mat) => (
+                                          <motion.button
+                                            key={mat.id}
+                                            whileHover={{ scale: 1.1 }}
+                                            whileTap={{ scale: 0.9 }}
+                                            onClick={() => setShapeMaterial(mat.id as any)}
+                                            style={{
+                                              width: '32px',
+                                              height: '32px',
+                                              borderRadius: '50%',
+                                              background: mat.color,
+                                              border: shapeMaterial === mat.id ? '2px solid white' : '2px solid transparent',
+                                              cursor: 'pointer',
+                                              boxShadow: shapeMaterial === mat.id ? `0 0 10px ${mat.color}` : 'none'
+                                            }}
+                                            title={mat.label}
+                                          />
+                                        ))}
+                                      </div>
 
-                                    {/* Foreground canvas for shapes */}
-                                    <canvas
-                                      ref={canvasRef}
-                                      width={1000}
-                                      height={600}
+                                      <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '4px 0' }} />
+
+                                      <motion.button
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={() => setIs3DView(!is3DView)}
+                                        style={{
+                                          padding: '8px',
+                                          background: is3DView ? 'linear-gradient(135deg, rgb(251, 191, 36), rgb(202, 138, 4))' : 'rgba(255, 255, 255, 0.1)',
+                                          border: 'none',
+                                          borderRadius: '8px',
+                                          color: 'white',
+                                          cursor: 'pointer',
+                                          fontSize: '13px',
+                                          fontWeight: '600',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'center',
+                                          gap: '6px'
+                                        }}
+                                      >
+                                        <span>🧊</span>
+                                        {is3DView ? '3D View On' : '3D View Off'}
+                                      </motion.button>
+                                    </div>
+                                  )}
+
+                                  {/* Layered Canvas System */}
+                                  <div style={{ 
+                                    position: 'relative', 
+                                    width: '100%', 
+                                    height: 'auto',
+                                    perspective: '1000px', // Add perspective for 3D tilt
+                                    overflow: 'hidden'
+                                  }}>
+                                    <motion.div
+                                      animate={{
+                                        rotateX: is3DView ? 25 : 0,
+                                        scale: is3DView ? 0.9 : 1,
+                                        y: is3DView ? 20 : 0
+                                      }}
+                                      transition={{ type: 'spring', stiffness: 100, damping: 20 }}
                                       style={{
                                         position: 'relative',
                                         width: '100%',
-                                        height: 'auto',
-                                        display: 'block',
-                                        pointerEvents: designMode === 'shapes' ? 'auto' : 'none',
-                                        cursor: designMode === 'shapes'
-                                          ? (isDragging ? 'grabbing' : isResizing ? 'nwse-resize' : 'default')
-                                          : 'default'
+                                        height: '100%',
+                                        transformStyle: 'preserve-3d'
                                       }}
-                                    />
+                                    >
+                                      {/* Background canvas for drawings */}
+                                      <canvas
+                                        ref={backgroundCanvasRef}
+                                        width={1000}
+                                        height={600}
+                                        style={{
+                                          position: 'absolute',
+                                          top: 0,
+                                          left: 0,
+                                          width: '100%',
+                                          height: 'auto',
+                                          display: 'block',
+                                          pointerEvents: designMode === 'draw' ? 'auto' : 'none',
+                                          cursor: designMode === 'draw'
+                                            ? (drawMode === 'eraser' ? 'cell' : drawMode === 'line' ? 'crosshair' : 'crosshair')
+                                            : 'default',
+                                          filter: is3DView ? 'drop-shadow(0 20px 30px rgba(0,0,0,0.5))' : 'none'
+                                        }}
+                                      />
+
+                                      {/* Foreground canvas for shapes */}
+                                      <canvas
+                                        ref={canvasRef}
+                                        width={1000}
+                                        height={600}
+                                        style={{
+                                          position: 'relative',
+                                          width: '100%',
+                                          height: 'auto',
+                                          display: 'block',
+                                          pointerEvents: designMode === 'shapes' ? 'auto' : 'none',
+                                          cursor: designMode === 'shapes'
+                                            ? (isDragging ? 'grabbing' : isResizing ? 'nwse-resize' : 'default')
+                                            : 'default'
+                                        }}
+                                      />
+                                    </motion.div>
                                   </div>
 
                                   {/* Action Buttons */}
