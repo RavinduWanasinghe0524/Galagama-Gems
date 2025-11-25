@@ -37,7 +37,7 @@ export function CustomDesign() {
   const [engravingText, setEngravingText] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [estimatedPrice, setEstimatedPrice] = useState(0);
-  const [isDrawing, setIsDrawing] = useState(false);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const backgroundCanvasRef = useRef<HTMLCanvasElement>(null); // For drawings
   const [uploadedDesign, setUploadedDesign] = useState<string | null>(null);
@@ -50,7 +50,7 @@ export function CustomDesign() {
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [lineStart, setLineStart] = useState<{ x: number, y: number } | null>(null);
-  const [dragOffset, setDragOffset] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
+
 
   const { scrollY } = useScroll();
   const backgroundY = useTransform(scrollY, [0, 500], [0, 150]);
@@ -417,10 +417,11 @@ export function CustomDesign() {
         const sizeDelta = (currentDist - resizeStartDist) * 2;
         const newSize = Math.max(30, Math.min(300, initialSize + sizeDelta));
 
+        const index = dragIndex;
         setDrawnShapes(prev => {
           const updated = [...prev];
-          updated[dragIndex] = {
-            ...updated[dragIndex],
+          updated[index] = {
+            ...updated[index],
             size: newSize
           };
           return updated;
@@ -431,10 +432,11 @@ export function CustomDesign() {
         const newX = mouseX - offsetX;
         const newY = mouseY - offsetY;
 
+        const index = dragIndex;
         setDrawnShapes(prev => {
           const updated = [...prev];
-          updated[dragIndex] = {
-            ...updated[dragIndex],
+          updated[index] = {
+            ...updated[index],
             x: newX,
             y: newY
           };
