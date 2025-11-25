@@ -5,6 +5,24 @@ import { Navigation } from './Navigation';
 import { Footer } from './Footer';
 import { Toast } from './Toast';
 import logoImage from '../assets/f9f3557d671d8125a616ddcb69e2a0d761511cdc.png';
+import gold18kImage from '../assets/custom_design/18k_gold.png';
+import roseGoldImage from '../assets/custom_design/rose_gold.png';
+import emeraldImage from '../assets/custom_design/emerald.png';
+import rubyImage from '../assets/custom_design/ruby.png';
+import amethystImage from '../assets/custom_design/amethyst.png';
+import topazImage from '../assets/custom_design/topaz.jpg';
+import garnetImage from '../assets/custom_design/garnet.jpg';
+import aquamarineImage from '../assets/custom_design/aquamarine.jpg';
+import opalImage from '../assets/custom_design/opal.jpg';
+import diamondImage from '../assets/custom_design/diamond.png';
+import sapphireImage from '../assets/custom_design/sapphire.png';
+import turquoiseImage from '../assets/custom_design/turquoise.jpg';
+import cubicZirconiaImage from '../assets/custom_design/cubic_zirconia.jpg';
+import moissaniteImage from '../assets/custom_design/moissanite.jpg';
+import platinumImage from '../assets/custom_design/platinum.png';
+import gold24kImage from '../assets/custom_design/gold_24k.png';
+import whiteGoldImage from '../assets/custom_design/white_gold.png';
+import silverImage from '../assets/custom_design/silver.png';
 import { useCart } from '../context/CartContext';
 
 export function CustomDesign() {
@@ -66,42 +84,42 @@ export function CustomDesign() {
       label: '24K Gold',
       price: 500,
       color: '#FFD700',
-      image: 'https://images.unsplash.com/photo-1610375461246-83df859d849d?w=300&h=300&fit=crop&q=80&auto=format'
+      image: gold24kImage
     },
     {
       value: 'gold-18k',
       label: '18K Gold',
       price: 350,
       color: '#F4C430',
-      image: 'https://images.unsplash.com/photo-1618042164219-62c820f10723?w=300&h=300&fit=crop&q=80&auto=format'
+      image: gold18kImage
     },
     {
       value: 'white-gold',
       label: 'White Gold',
       price: 400,
-      color: '#E8E8E8',
-      image: 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=300&h=300&fit=crop&q=80&auto=format'
+      color: '#E5E4E2',
+      image: whiteGoldImage
     },
     {
       value: 'rose-gold',
       label: 'Rose Gold',
       price: 420,
       color: '#B76E79',
-      image: 'https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=300&h=300&fit=crop&q=80&auto=format'
+      image: roseGoldImage
     },
     {
       value: 'platinum',
       label: 'Platinum',
       price: 600,
       color: '#E5E4E2',
-      image: 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=300&h=300&fit=crop&q=80&auto=format'
+      image: platinumImage
     },
     {
       value: 'silver',
       label: 'Sterling Silver',
       price: 150,
       color: '#C0C0C0',
-      image: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=300&h=300&fit=crop&q=80&auto=format'
+      image: silverImage
     },
   ];
 
@@ -119,28 +137,28 @@ export function CustomDesign() {
         label: 'Diamond',
         price: 800,
         color: '#B9F2FF',
-        image: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=300&h=300&fit=crop&q=80&auto=format'
+        image: diamondImage
       },
       {
         value: 'ruby',
         label: 'Ruby',
         price: 600,
         color: '#E0115F',
-        image: 'https://images.unsplash.com/photo-1605100804999-1fdd6f4e4f3d?w=300&h=300&fit=crop&q=80&auto=format'
+        image: rubyImage
       },
       {
         value: 'sapphire',
         label: 'Sapphire',
         price: 550,
         color: '#0F52BA',
-        image: 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=300&h=300&fit=crop&q=80&auto=format'
+        image: sapphireImage
       },
       {
         value: 'emerald',
         label: 'Emerald',
         price: 650,
         color: '#50C878',
-        image: 'https://images.unsplash.com/photo-1610216705422-caa3fcb6d158?w=300&h=300&fit=crop&q=80&auto=format'
+        image: emeraldImage
       },
     ],
     'semi-precious': [
@@ -149,42 +167,42 @@ export function CustomDesign() {
         label: 'Amethyst',
         price: 150,
         color: '#9966CC',
-        image: 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=300&h=300&fit=crop&q=80&auto=format'
+        image: amethystImage
       },
       {
         value: 'topaz',
         label: 'Topaz',
         price: 180,
         color: '#FFC87C',
-        image: 'https://images.unsplash.com/photo-1634755974992-c3e8046b0d4b?w=300&h=300&fit=crop&q=80&auto=format'
+        image: topazImage
       },
       {
         value: 'aquamarine',
         label: 'Aquamarine',
         price: 200,
         color: '#7FFFD4',
-        image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=300&h=300&fit=crop&q=80&auto=format'
+        image: aquamarineImage
       },
       {
         value: 'garnet',
         label: 'Garnet',
         price: 120,
         color: '#733635',
-        image: 'https://images.unsplash.com/photo-1635767798597-99c5f0d4b12d?w=300&h=300&fit=crop&q=80&auto=format'
+        image: garnetImage
       },
       {
         value: 'opal',
         label: 'Opal',
         price: 220,
         color: '#A8C3BC',
-        image: 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=300&h=300&fit=crop&q=80&auto=format'
+        image: opalImage
       },
       {
         value: 'turquoise',
         label: 'Turquoise',
         price: 100,
         color: '#40E0D0',
-        image: 'https://images.unsplash.com/photo-1634226005148-f85c5d6c5dcb?w=300&h=300&fit=crop&q=80&auto=format'
+        image: turquoiseImage
       },
     ],
     synthetic: [
@@ -193,14 +211,14 @@ export function CustomDesign() {
         label: 'Cubic Zirconia',
         price: 50,
         color: '#FFFFFF',
-        image: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=300&h=300&fit=crop&q=80&auto=format'
+        image: cubicZirconiaImage
       },
       {
         value: 'moissanite',
         label: 'Moissanite',
         price: 250,
         color: '#F0EAD6',
-        image: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=300&h=300&fit=crop&q=80&auto=format'
+        image: moissaniteImage
       },
     ],
     none: [],
